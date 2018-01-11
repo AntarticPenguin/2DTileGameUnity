@@ -9,7 +9,7 @@ public class TileMap : MonoBehaviour
 	
 	void Start ()
     {
-        InitSpriteList();
+        
 	}
 	
 	void Update ()
@@ -22,7 +22,7 @@ public class TileMap : MonoBehaviour
 
     Sprite[] _spriteArray;
 
-    void InitSpriteList()
+    public void Init()
     {
         _spriteArray = Resources.LoadAll<Sprite>("Sprites/MapSprite");
         CreateTiles();
@@ -36,7 +36,8 @@ public class TileMap : MonoBehaviour
     int _width;
     int _height;
 
-    List<TileCell> _tileCellList = new List<TileCell>();
+    //List<TileCell> _tileCellList = new List<TileCell>();
+    TileCell[,] _tileCellList;
 
     void CreateTiles()
     {
@@ -52,6 +53,7 @@ public class TileMap : MonoBehaviour
                 _width = int.Parse(token[1]);
                 _height = int.Parse(token[2]);
             }
+            _tileCellList = new TileCell[_height, _width];
 
             for (int y = 0; y < _height; y++)
             {
@@ -68,13 +70,18 @@ public class TileMap : MonoBehaviour
 
                     TileObject tileObject = tileGameObject.GetComponent<TileObject>();
                     tileObject.Init(_spriteArray[spriteIndex]);
-                    //tileObject.SetPosition(x * tileSize / 100.0f, y * tileSize / 100.0f);
 
+                    /*
                     TileCell tileCell = new TileCell();
                     tileCell.Init();
                     tileCell.SetPosition(x * tileSize / 100.0f, y * tileSize / 100.0f);
                     tileCell.AddObject(eTileLayer.GROUND, tileObject);
                     _tileCellList.Add(tileCell);
+                    */
+                    _tileCellList[y, x] = new TileCell();
+                    GetTileCell(x, y).Init();
+                    GetTileCell(x, y).SetPosition(x * tileSize / 100.0f, y * tileSize / 100.0f);
+                    GetTileCell(x, y).AddObject(eTileLayer.GROUND, tileObject);
                 }
             }
         }
@@ -99,13 +106,30 @@ public class TileMap : MonoBehaviour
 
                         TileObject tileObject = tileGameObject.GetComponent<TileObject>();
                         tileObject.Init(_spriteArray[spriteIndex]);
-                        //tileObject.SetPosition(x * tileSize / 100.0f, y * tileSize / 100.0f);
 
+                        /*
                         int cellIndex = (y * _width) + x;
                         _tileCellList[cellIndex].AddObject(eTileLayer.GROUND, tileObject);
+                        */
+                        GetTileCell(x, y).AddObject(eTileLayer.GROUND, tileObject);
                     }
                 }
             }
         }
+    }
+
+    public int GetWidth()
+    {
+        return _width;
+    }
+
+    public int GetHeight()
+    {
+        return _height;
+    }
+
+    public TileCell GetTileCell(int x, int y)
+    {
+        return _tileCellList[y, x];
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileObject : MonoBehaviour
+public class TileObject : MapObject
 {
 
     //Unity Functions
@@ -23,10 +23,5 @@ public class TileObject : MonoBehaviour
     public void Init(Sprite sprite)
     {
         gameObject.GetComponent<SpriteRenderer>().sprite = sprite;
-    }
-
-    public void SetPosition(Vector2 position)
-    {
-        gameObject.transform.localPosition = position;
     }
 }
