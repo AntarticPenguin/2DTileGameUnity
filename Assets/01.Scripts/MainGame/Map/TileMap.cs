@@ -36,7 +36,6 @@ public class TileMap : MonoBehaviour
     int _width;
     int _height;
 
-    //List<TileCell> _tileCellList = new List<TileCell>();
     TileCell[,] _tileCellList;
 
     void CreateTiles()
@@ -71,13 +70,6 @@ public class TileMap : MonoBehaviour
                     TileObject tileObject = tileGameObject.GetComponent<TileObject>();
                     tileObject.Init(_spriteArray[spriteIndex]);
 
-                    /*
-                    TileCell tileCell = new TileCell();
-                    tileCell.Init();
-                    tileCell.SetPosition(x * tileSize / 100.0f, y * tileSize / 100.0f);
-                    tileCell.AddObject(eTileLayer.GROUND, tileObject);
-                    _tileCellList.Add(tileCell);
-                    */
                     _tileCellList[y, x] = new TileCell();
                     GetTileCell(x, y).Init();
                     GetTileCell(x, y).SetPosition(x * tileSize / 100.0f, y * tileSize / 100.0f);
@@ -107,10 +99,6 @@ public class TileMap : MonoBehaviour
                         TileObject tileObject = tileGameObject.GetComponent<TileObject>();
                         tileObject.Init(_spriteArray[spriteIndex]);
 
-                        /*
-                        int cellIndex = (y * _width) + x;
-                        _tileCellList[cellIndex].AddObject(eTileLayer.GROUND, tileObject);
-                        */
                         GetTileCell(x, y).AddObject(eTileLayer.GROUND, tileObject);
                     }
                 }
