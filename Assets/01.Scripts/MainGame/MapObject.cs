@@ -18,7 +18,6 @@ public class MapObject : MonoBehaviour
 	}
 
 
-
     public void SetPosition(Vector2 position)
     {
         gameObject.transform.localPosition = position;
@@ -27,8 +26,11 @@ public class MapObject : MonoBehaviour
 
     //Sorting
 
-    virtual public void SetSortingOrder(int sortingID, int sortingOrder)
+    virtual public void SetSortingOrder(eTileLayer layer, int sortingOrder)
     {
+        _curLayer = layer;
+
+        int sortingID = SortingLayer.NameToID(layer.ToString());
         gameObject.GetComponent<SpriteRenderer>().sortingLayerID = sortingID;
         gameObject.GetComponent<SpriteRenderer>().sortingOrder = sortingOrder;
     }
@@ -40,5 +42,15 @@ public class MapObject : MonoBehaviour
     {
         Camera.main.transform.SetParent(transform);
         Camera.main.transform.localPosition = new Vector3(0.0f, 0.0f, Camera.main.transform.localPosition.z);
+    }
+
+
+    //Layer
+
+    protected eTileLayer _curLayer;
+
+    public eTileLayer GetCurrentLayer()
+    {
+        return _curLayer;
     }
 }

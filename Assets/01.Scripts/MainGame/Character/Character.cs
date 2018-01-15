@@ -2,9 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum eMoveDirection
+{
+    NONE,
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN,
+}
+
 public class Character : MapObject
 {
-    GameObject _characterView;
+    protected GameObject _characterView;
+
+    protected int _tileX = 0;
+    protected int _tileY = 0;
 
     // Use this for initialization
     void Start ()
@@ -24,7 +36,6 @@ public class Character : MapObject
     {
         //View를 붙인다(실제로 보일 모습(이미지), 카메라 아님)
         //Attach Player's View.
-        //GameObject characterViewPrefabs = Resources.Load<GameObject>("Prefabs/CharacterView/character01");
         string filePath = "Prefabs/CharacterView/" + viewName;
         GameObject characterViewPrefabs = Resources.Load<GameObject>(filePath);
 
@@ -35,14 +46,16 @@ public class Character : MapObject
 
         TileMap map = GameManager.Instance.GetMap();
 
-        int x = Random.Range(1, map.GetWidth() - 2);
-        int y = Random.Range(1, map.GetHeight() - 2);
-        TileCell tileCell = map.GetTileCell(x, y);
-        tileCell.AddObject(eTileLayer.MIDDLE, this);
+        _tileX = Random.Range(1, map.GetWidth() - 2);
+        _tileY = Random.Range(1, map.GetHeight() - 2);
+        map.SetObject(_tileX, _tileY, this, eTileLayer.MIDDLE);
     }
 
-    override public void SetSortingOrder(int sortingID, int sortingOrder)
+    override public void SetSortingOrder(eTileLayer layer, int sortingOrder)
     {
+        _curLayer = layer;
+
+        int sortingID = SortingLayer.NameToID(layer.ToString());
         _characterView.GetComponent<SpriteRenderer>().sortingLayerID = sortingID;
         _characterView.GetComponent<SpriteRenderer>().sortingOrder = sortingOrder;
     }

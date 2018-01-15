@@ -33,11 +33,16 @@ public class TileCell
     {
         List<MapObject> mapObjectList = _mapObjectMap[(int)layer];
 
-        int sortingID = SortingLayer.NameToID(layer.ToString());
         int sortingOrder = mapObjectList.Count;
-        mapObject.SetSortingOrder(sortingID, sortingOrder);
+        mapObject.SetSortingOrder(layer, sortingOrder);
         mapObject.SetPosition(_position);
 
         mapObjectList.Add(mapObject);
+    }
+
+    public void RemoveObject(MapObject mapObject)
+    {
+        List<MapObject> mapObjectList = _mapObjectMap[(int)mapObject.GetCurrentLayer()];
+        mapObjectList.Remove(mapObject);
     }
 }

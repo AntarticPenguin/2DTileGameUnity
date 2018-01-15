@@ -120,4 +120,25 @@ public class TileMap : MonoBehaviour
     {
         return _tileCellList[y, x];
     }
+
+    public bool CanMoveTile(int tileX, int tileY)
+    {
+        if (tileX < 0 || _width <= tileX)
+            return false;
+        if (tileY < 0 || _height <= tileY)
+            return false;
+        return true;
+    }
+
+    public void ResetObject(int tileX, int tileY, MapObject mapObject)
+    {
+        TileCell tileCell = GetTileCell(tileX, tileY);
+        tileCell.RemoveObject(mapObject);
+    }
+
+    public void SetObject(int tileX, int tileY, MapObject mapObject, eTileLayer layer)
+    {
+        TileCell tileCell = GetTileCell(tileX, tileY);
+        tileCell.AddObject(layer, mapObject);
+    }
 }
