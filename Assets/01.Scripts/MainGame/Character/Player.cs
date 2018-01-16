@@ -48,10 +48,22 @@ public class Player : Character
 
         switch(moveDirection)
         {
-            case eMoveDirection.LEFT: moveX--; break;
-            case eMoveDirection.RIGHT: moveX++; break;
-            case eMoveDirection.UP: moveY++; break;
-            case eMoveDirection.DOWN: moveY--; break;
+            case eMoveDirection.LEFT:
+                moveX--;
+                animationTrigger = "left";
+                break;
+            case eMoveDirection.RIGHT:
+                moveX++;
+                animationTrigger = "right";
+                break;
+            case eMoveDirection.UP:
+                moveY++;
+                animationTrigger = "up";
+                break;
+            case eMoveDirection.DOWN:
+                moveY--;
+                animationTrigger = "down";
+                break;
         }
 
         _characterView.GetComponent<Animator>().SetTrigger(animationTrigger);
