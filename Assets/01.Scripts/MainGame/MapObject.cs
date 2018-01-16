@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum eMapObjectType
+{
+    NONE,
+    MONSTER,
+}
+
 public class MapObject : MonoBehaviour
 {
 
@@ -17,6 +23,15 @@ public class MapObject : MonoBehaviour
 		
 	}
 
+
+    //Info
+
+    protected eMapObjectType _type = eMapObjectType.NONE;
+
+    public eMapObjectType GetObjectType()
+    {
+        return _type;
+    }
 
     public void SetPosition(Vector2 position)
     {
@@ -52,5 +67,33 @@ public class MapObject : MonoBehaviour
     public eTileLayer GetCurrentLayer()
     {
         return _curLayer;
+    }
+
+
+    //Move
+
+    bool _canMove = true;
+
+    public bool CanMove()
+    {
+        return _canMove;
+    }
+
+    public void SetCanMove(bool canMove)
+    {
+        _canMove = canMove;
+    }
+
+
+    //Message
+
+    public void ReceiveObjectMessage(MessageParam msgParam)
+    {
+        switch(msgParam.message)
+        {
+            case "Attack":
+                Debug.Log("Receive AttackMessage: " + msgParam.attackPoint);
+                break;
+        }
     }
 }

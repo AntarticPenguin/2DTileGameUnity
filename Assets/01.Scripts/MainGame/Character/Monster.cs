@@ -8,7 +8,7 @@ public class Monster : Character
 
     void Start()
     {
-
+        _type = eMapObjectType.MONSTER;
     }
 
     void Update()

@@ -18,6 +18,8 @@ public class Character : MapObject
     protected int _tileX = 0;
     protected int _tileY = 0;
 
+    protected int _attackPoint = 10;
+
     // Use this for initialization
     void Start ()
     {
@@ -44,11 +46,14 @@ public class Character : MapObject
         _characterView.transform.localPosition = Vector3.zero;
         _characterView.transform.localScale = Vector3.one;
 
+        SetCanMove(false);
+
         TileMap map = GameManager.Instance.GetMap();
 
         _tileX = Random.Range(1, map.GetWidth() - 2);
         _tileY = Random.Range(1, map.GetHeight() - 2);
         map.SetObject(_tileX, _tileY, this, eTileLayer.MIDDLE);
+
     }
 
     override public void SetSortingOrder(eTileLayer layer, int sortingOrder)

@@ -98,6 +98,7 @@ public class TileMap : MonoBehaviour
 
                         TileObject tileObject = tileGameObject.GetComponent<TileObject>();
                         tileObject.Init(_spriteArray[spriteIndex]);
+                        tileObject.SetCanMove(false);
 
                         GetTileCell(x, y).AddObject(eTileLayer.GROUND, tileObject);
                     }
@@ -116,6 +117,9 @@ public class TileMap : MonoBehaviour
         return _height;
     }
 
+    
+    //Tile
+
     public TileCell GetTileCell(int x, int y)
     {
         return _tileCellList[y, x];
@@ -127,7 +131,20 @@ public class TileMap : MonoBehaviour
             return false;
         if (tileY < 0 || _height <= tileY)
             return false;
-        return true;
+
+        TileCell tileCell = GetTileCell(tileX, tileY);
+        return tileCell.CanMove();
+    }
+
+    public List<MapObject> GetCollisionList(int tileX, int tileY)
+    {
+        if (tileX < 0 || _width <= tileX)
+            return null;
+        if (tileY < 0 || _height <= tileY)
+            return null;
+
+        TileCell tileCell = GetTileCell(tileX, tileY);
+        return tileCell.GetCollsionList();
     }
 
     public void ResetObject(int tileX, int tileY, MapObject mapObject)
