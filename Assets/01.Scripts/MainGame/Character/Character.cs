@@ -68,14 +68,15 @@ public class Character : MapObject
 
     void InitState()
     {
-        //_stateMap[eStateType.IDLE] = new IdleState();
         {
             State state = new IdleState();
             state.Init(this);
+            _stateMap[eStateType.IDLE] = state;
         }
         {
             State state = new MoveState();
             state.Init(this);
+            _stateMap[eStateType.MOVE] = state;
         }
         _state = _stateMap[eStateType.IDLE];
     }
