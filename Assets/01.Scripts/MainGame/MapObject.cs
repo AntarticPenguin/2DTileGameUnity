@@ -72,7 +72,7 @@ public class MapObject : MonoBehaviour
 
     //Move
 
-    bool _canMove = true;
+    protected bool _canMove = true;
 
     public bool CanMove()
     {
@@ -87,13 +87,14 @@ public class MapObject : MonoBehaviour
 
     //Message
 
-    public void ReceiveObjectMessage(MessageParam msgParam)
+    virtual public void ReceiveObjectMessage(MessageParam msgParam)
     {
         switch(msgParam.message)
         {
-            case "Attack":
-                Debug.Log("Receive AttackMessage: " + msgParam.attackPoint);
-                break;
+            //case "Attack":
+            //    //Debug.Log("Receive AttackMessage: " + msgParam.attackPoint);
+            //    Damaged(msgParam.attackPoint);
+            //    break;
         }
     }
 }

@@ -13,27 +13,15 @@ public class Player : Character
 	
 	void Update ()
     {
-        eMoveDirection moveDirection = eMoveDirection.NONE;
+        if (false == _isLive)
+            return;
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            moveDirection = eMoveDirection.LEFT;
-        }
-        else if(Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            moveDirection = eMoveDirection.RIGHT;
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            moveDirection = eMoveDirection.UP;
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            moveDirection = eMoveDirection.DOWN;
-        }
+        eMoveDirection moveDirection = _state.Update();
 
+        /* 
         if (eMoveDirection.NONE != moveDirection)
             Move(moveDirection);
+        */
     }
 
 
@@ -89,17 +77,5 @@ public class Player : Character
                 }
             }
         }
-
-    }
-
-    void Attack(MapObject enemy)
-    {
-        MessageParam msgParam = new MessageParam();
-        msgParam.sender = this;
-        msgParam.receiver = enemy;
-        msgParam.message = "Attack";
-        msgParam.attackPoint = _attackPoint;
-
-        MessageSystem.Instance.Send(msgParam);
     }
 }

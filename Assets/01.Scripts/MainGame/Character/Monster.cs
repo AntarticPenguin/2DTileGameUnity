@@ -13,6 +13,7 @@ public class Monster : Character
 
     void Update()
     {
-
+        if (false == _isLive)
+            return;
     }
 }
