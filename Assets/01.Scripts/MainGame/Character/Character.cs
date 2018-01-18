@@ -19,7 +19,7 @@ public class Character : MapObject
     protected int _tileY = 0;
 
     protected bool _isLive = true;
-    protected int _hp = 20;
+    protected int _hp = 10;
 
     protected int _attackPoint = 10;
 
@@ -32,8 +32,11 @@ public class Character : MapObject
 	// Update is called once per frame
 	void Update ()
     {
-		
-	}
+        //if (false == _isLive)
+        //    return;
+
+        _state.Update();
+    }
 
     //Init
 
@@ -77,6 +80,21 @@ public class Character : MapObject
             State state = new MoveState();
             state.Init(this);
             _stateMap[eStateType.MOVE] = state;
+        }
+        {
+            State state = new AttackState();
+            state.Init(this);
+            _stateMap[eStateType.ATTACK] = state;
+        }
+        {
+            State state = new DamagedState();
+            state.Init(this);
+            _stateMap[eStateType.DAMAGED] = state;
+        }
+        {
+            State state = new DeadState();
+            state.Init(this);
+            _stateMap[eStateType.DEAD] = state;
         }
         _state = _stateMap[eStateType.IDLE];
     }
@@ -146,8 +164,9 @@ public class Character : MapObject
         switch (msgParam.message)
         {
             case "Attack":
-                //Debug.Log("Receive AttackMessage: " + msgParam.attackPoint);
-                Damaged(msgParam.attackPoint);
+                //Damaged(msgParam.attackPoint);
+                _damagedPoint = msgParam.attackPoint;
+                _state.NextState(eStateType.DAMAGED);
                 break;
         }
     }
@@ -163,14 +182,25 @@ public class Character : MapObject
         MessageSystem.Instance.Send(msgParam);
     }
 
-    void Damaged(int attackPoint)
+    int _damagedPoint = 0;
+
+    public int GetDamagedPoint()
     {
-        _hp -= attackPoint;
+        return _damagedPoint;
+    }
+
+    public void DecreaseHP(int damagedPoint)
+    {
+        _hp -= damagedPoint;
         if (_hp <= 0)
         {
             _hp = 0;
-            _isLive = true;
-            _canMove = true;
+            _isLive = false;
         }
+    }
+
+    public bool IsLive()
+    {
+        return _isLive;
     }
 }

@@ -7,6 +7,9 @@ public enum eStateType
     NONE,
     IDLE,
     MOVE,
+    ATTACK,
+    DAMAGED,
+    DEAD,
 }
 
 public class State
@@ -29,13 +32,16 @@ public class State
         
     }
 
-    virtual public eMoveDirection Update()
+    virtual public void Update()
     {
         if (eStateType.NONE != _nextState)
         {
             _character.ChangeState(_nextState);
-            return eMoveDirection.NONE;
         }
-        return eMoveDirection.NONE;
+    }
+
+    public void NextState(eStateType nextState)
+    {
+        _nextState = nextState;
     }
 }
