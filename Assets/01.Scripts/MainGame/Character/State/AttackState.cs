@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AttackState : State
 {
-	// Use this for initialization
 	override public void Start ()
     {
         base.Start();
@@ -41,6 +40,7 @@ public class AttackState : State
             }
         }
 
+        _character.ResetAttackCoolTime();
         _character.SetNextDirection(eMoveDirection.NONE);
         _nextState = eStateType.IDLE;
     }

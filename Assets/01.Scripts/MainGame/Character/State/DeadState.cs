@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class DeadState : State
 {
-	// Use this for initialization
 	override public void Start ()
     {
         base.Start();

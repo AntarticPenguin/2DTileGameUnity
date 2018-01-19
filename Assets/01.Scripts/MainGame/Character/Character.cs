@@ -19,7 +19,7 @@ public class Character : MapObject
     protected int _tileY = 0;
 
     protected bool _isLive = true;
-    protected int _hp = 10;
+    protected int _hp = 20;
 
     protected int _attackPoint = 10;
 
@@ -32,9 +32,7 @@ public class Character : MapObject
 	// Update is called once per frame
 	void Update ()
     {
-        //if (false == _isLive)
-        //    return;
-
+        UpdateAttackCoolTime();
         _state.Update();
     }
 
@@ -69,7 +67,7 @@ public class Character : MapObject
     protected Dictionary<eStateType, State> _stateMap = new Dictionary<eStateType, State>();
     protected State _state;
 
-    void InitState()
+    virtual public void InitState()
     {
         {
             State state = new IdleState();
@@ -164,12 +162,17 @@ public class Character : MapObject
         switch (msgParam.message)
         {
             case "Attack":
-                //Damaged(msgParam.attackPoint);
                 _damagedPoint = msgParam.attackPoint;
                 _state.NextState(eStateType.DAMAGED);
                 break;
         }
     }
+
+
+    //Attack
+
+    float _attackCooltimeDuration = 0.0f;
+    float _attackCooltime = 1.0f;
 
     public void Attack(MapObject enemy)
     {
@@ -180,6 +183,30 @@ public class Character : MapObject
         msgParam.attackPoint = _attackPoint;
 
         MessageSystem.Instance.Send(msgParam);
+    }
+
+    void UpdateAttackCoolTime()
+    {
+        if (_attackCooltimeDuration < _attackCooltime)
+        {
+            _attackCooltimeDuration += Time.deltaTime;
+        }
+        else
+        {
+            _attackCooltimeDuration = _attackCooltime;
+        }
+    }
+
+    public bool IsAttackCoolDown()
+    {
+        if (_attackCooltime <= _attackCooltimeDuration)
+            return true;
+        return false;
+    }
+
+    public void ResetAttackCoolTime()
+    {
+        _attackCooltimeDuration = 0.0f;
     }
 
     int _damagedPoint = 0;

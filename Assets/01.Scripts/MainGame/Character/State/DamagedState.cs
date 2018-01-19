@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class DamagedState : State
 {
-	// Use this for initialization
 	override public void Start ()
     {
         base.Start();
@@ -17,6 +16,8 @@ public class DamagedState : State
             _nextState = eStateType.DEAD;
         }
         else
+        {
             _nextState = eStateType.IDLE;
+        }
     }
 }
