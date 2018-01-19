@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum eMoveDirection
 {
@@ -19,7 +20,7 @@ public class Character : MapObject
     protected int _tileY = 0;
 
     protected bool _isLive = true;
-    protected int _hp = 20;
+    protected int _hp = 100;
 
     protected int _attackPoint = 10;
 
@@ -34,6 +35,9 @@ public class Character : MapObject
     {
         UpdateAttackCoolTime();
         _state.Update();
+
+        //UI
+        UpdateHp();
     }
 
     //Init
@@ -218,6 +222,9 @@ public class Character : MapObject
 
     public void DecreaseHP(int damagedPoint)
     {
+        _characterView.GetComponent<SpriteRenderer>().color = Color.red;
+        Invoke("ResetColor", 0.1f);
+
         _hp -= damagedPoint;
         if (_hp <= 0)
         {
@@ -226,8 +233,34 @@ public class Character : MapObject
         }
     }
 
+    void ResetColor()
+    {
+        _characterView.GetComponent<SpriteRenderer>().color = Color.white;
+    }
+
     public bool IsLive()
     {
         return _isLive;
+    }
+
+
+    //UI
+
+    Slider _hpGuage;
+
+    public void LinkHPGuage(Slider hpGuage)
+    {
+        GameObject canvasObject = transform.Find("Canvas").gameObject;
+        hpGuage.transform.SetParent(canvasObject.transform);
+        hpGuage.transform.localPosition = Vector3.zero;
+        hpGuage.transform.localScale = Vector3.one;
+
+        _hpGuage = hpGuage;
+        _hpGuage.value = _hp / 100.0f;
+    }
+
+    void UpdateHp()
+    {
+        _hpGuage.value = _hp / 100.0f;
     }
 }

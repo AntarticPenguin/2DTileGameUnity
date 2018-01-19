@@ -6,9 +6,6 @@ public class MonsterIdleState : State
 {
     override public void Update()
     {
-        if (eStateType.NONE != _nextState)
-        {
-            _character.ChangeState(_nextState);
-        }
+        base.Update();
     }
 }

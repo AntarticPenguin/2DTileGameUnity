@@ -31,10 +31,7 @@ public class MoveState : State
             if (true == _character.IsAttackCoolDown())
                 _nextState = eStateType.ATTACK;
             else
-            {
-                Debug.Log("CoolTime is not Ready");
                 _nextState = eStateType.IDLE;
-            }
         }
         else
         {

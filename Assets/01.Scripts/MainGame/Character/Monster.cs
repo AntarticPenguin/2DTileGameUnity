@@ -13,30 +13,11 @@ public class Monster : Character
 
     override public void InitState()
     {
+        base.InitState();
         {
             State state = new MonsterIdleState();
             state.Init(this);
             _stateMap[eStateType.IDLE] = state;
-        }
-        {
-            State state = new MoveState();
-            state.Init(this);
-            _stateMap[eStateType.MOVE] = state;
-        }
-        {
-            State state = new AttackState();
-            state.Init(this);
-            _stateMap[eStateType.ATTACK] = state;
-        }
-        {
-            State state = new DamagedState();
-            state.Init(this);
-            _stateMap[eStateType.DAMAGED] = state;
-        }
-        {
-            State state = new DeadState();
-            state.Init(this);
-            _stateMap[eStateType.DEAD] = state;
         }
         _state = _stateMap[eStateType.IDLE];
     }
