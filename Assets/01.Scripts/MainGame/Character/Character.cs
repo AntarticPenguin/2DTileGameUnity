@@ -37,7 +37,7 @@ public class Character : MapObject
         _state.Update();
 
         //UI
-        UpdateHp();
+        UpdateSlider();
     }
 
     //Init
@@ -247,20 +247,33 @@ public class Character : MapObject
     //UI
 
     Slider _hpGuage;
+    Slider _cooltimeGuage;
 
     public void LinkHPGuage(Slider hpGuage)
     {
         GameObject canvasObject = transform.Find("Canvas").gameObject;
         hpGuage.transform.SetParent(canvasObject.transform);
-        hpGuage.transform.localPosition = Vector3.zero;
+        hpGuage.transform.localPosition = new Vector3(0.0f, 0.5f, 0.0f);
         hpGuage.transform.localScale = Vector3.one;
 
         _hpGuage = hpGuage;
         _hpGuage.value = _hp / 100.0f;
     }
 
-    void UpdateHp()
+    public void LinkCooltimeGuage(Slider cooltimeGuage)
+    {
+        GameObject canvasObject = transform.Find("Canvas").gameObject;
+        cooltimeGuage.transform.SetParent(canvasObject.transform);
+        cooltimeGuage.transform.localPosition = Vector3.zero;
+        cooltimeGuage.transform.localScale = Vector3.one;
+
+        _cooltimeGuage = cooltimeGuage;
+        _cooltimeGuage.value = _attackCooltimeDuration;
+    }
+
+    void UpdateSlider()
     {
         _hpGuage.value = _hp / 100.0f;
+        _cooltimeGuage.value = _attackCooltimeDuration;
     }
 }
