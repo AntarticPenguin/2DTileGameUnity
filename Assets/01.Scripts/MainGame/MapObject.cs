@@ -10,7 +10,6 @@ public enum eMapObjectType
 
 public class MapObject : MonoBehaviour
 {
-
     //Unity Functions
 
 	void Start ()
@@ -89,7 +88,7 @@ public class MapObject : MonoBehaviour
 
     virtual public void ReceiveObjectMessage(MessageParam msgParam)
     {
-        switch(msgParam.message)
+        switch (msgParam.message)
         {
             //case "Attack":
             //    //Debug.Log("Receive AttackMessage: " + msgParam.attackPoint);
@@ -97,4 +96,13 @@ public class MapObject : MonoBehaviour
             //    break;
         }
     }
+
+
+    //tile Position
+
+    protected int _tileX;
+    protected int _tileY;
+
+    public int GetTileX() { return _tileX; }
+    public int GetTileY() { return _tileY; }
 }

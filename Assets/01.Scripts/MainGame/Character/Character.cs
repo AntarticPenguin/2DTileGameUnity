@@ -16,8 +16,8 @@ public class Character : MapObject
 {
     protected GameObject _characterView;
 
-    protected int _tileX = 0;
-    protected int _tileY = 0;
+    //protected int _tileX = 0;
+    //protected int _tileY = 0;
 
     protected bool _isLive = true;
     protected int _hp = 100;
@@ -74,7 +74,8 @@ public class Character : MapObject
     virtual public void InitState()
     {
         {
-            State state = new IdleState();
+            //State state = new IdleState();
+            State state = new PathfindingIdleState();
             state.Init(this);
             _stateMap[eStateType.IDLE] = state;
         }
@@ -98,6 +99,11 @@ public class Character : MapObject
             state.Init(this);
             _stateMap[eStateType.DEAD] = state;
         }
+        {
+            State state = new PathfindingMoveState();
+            state.Init(this);
+            _stateMap[eStateType.PathfindingMove] = state;
+        }
         _state = _stateMap[eStateType.IDLE];
     }
 
@@ -118,8 +124,8 @@ public class Character : MapObject
         _characterView.GetComponent<SpriteRenderer>().sortingOrder = sortingOrder;
     }
 
-    public int GetTileX() { return _tileX; }
-    public int GetTileY() { return _tileY; }
+    //public int GetTileX() { return _tileX; }
+    //public int GetTileY() { return _tileY; }
 
     eMoveDirection _nextDirection = eMoveDirection.NONE;
 
@@ -275,5 +281,21 @@ public class Character : MapObject
     {
         _hpGuage.value = _hp / 100.0f;
         _cooltimeGuage.value = _attackCooltimeDuration;
+    }
+
+
+    //Pathfinding
+
+    TileCell _targetTileCell = null;
+
+    public void SetTargetTileCell(int tileX, int tileY)
+    {
+        TileMap map = GameManager.Instance.GetMap();
+        _targetTileCell = map.GetTileCell(tileX, tileY);
+    }
+
+    public TileCell GetTargetTileCell()
+    {
+        return _targetTileCell;
     }
 }

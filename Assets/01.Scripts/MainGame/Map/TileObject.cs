@@ -24,4 +24,10 @@ public class TileObject : MapObject
     {
         gameObject.GetComponent<SpriteRenderer>().sprite = sprite;
     }
+
+    public void SetTilePosition(int tileX, int tileY)
+    {
+        _tileX = tileX;
+        _tileY = tileY;
+    }
 }

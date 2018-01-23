@@ -25,15 +25,19 @@ public class MainGameUI : MonoBehaviour {
 
     public Slider CreateHPSlider()
     {
-        GameObject hpObject = GameObject.Instantiate(HPGuagePrefabs);
-        Slider slider = hpObject.GetComponent<Slider>();
+        return CreateSlider(HPGuagePrefabs);
+    }
+
+    public Slider CreateCooltimeSlider()
+    {
+        return CreateSlider(CooltimeGuagePrefabs);
+    }
+
+    public Slider CreateSlider(GameObject SliderPrefabs)
+    {
+        GameObject sliderObject = GameObject.Instantiate(SliderPrefabs);
+        Slider slider = sliderObject.GetComponent<Slider>();
         return slider;
     }
 
-    public Slider CrateCooltimeSlider()
-    {
-        GameObject cooltimeObject = GameObject.Instantiate(CooltimeGuagePrefabs);
-        Slider slider = cooltimeObject.GetComponent<Slider>();
-        return slider;
-    }
 }

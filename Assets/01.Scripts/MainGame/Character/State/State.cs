@@ -9,6 +9,8 @@ public enum eStateType
     MOVE,
     ATTACK,
     DAMAGED,
+    PathfindingIdle,
+    PathfindingMove,
     DEAD,
 }
 
