@@ -18,14 +18,12 @@ public class PathfindingIdleState : State
 
             if (Physics.Raycast(ray, out hit))
             {
-                hit.transform.GetComponent<SpriteRenderer>().color = Color.blue;
+                hit.transform.GetComponent<SpriteRenderer>().color = Color.red;
                 TileObject hitTile = hit.transform.GetComponent<TileObject>();
                 int tileX = hitTile.GetTileX();
                 int tileY = hitTile.GetTileY();
-                Debug.Log("X: " + tileX + "Y: " + tileY);
-                Debug.Log("characterX: " + _character.GetTileX() + "characterY: " + _character.GetTileY());
                 _character.SetTargetTileCell(tileX, tileY);
-                _nextState = eStateType.PathfindingMove;
+                _nextState = eStateType.PATHFINDING;
             }
         }
 	}

@@ -74,8 +74,7 @@ public class Character : MapObject
     virtual public void InitState()
     {
         {
-            //State state = new IdleState();
-            State state = new PathfindingIdleState();
+            State state = new IdleState();
             state.Init(this);
             _stateMap[eStateType.IDLE] = state;
         }
@@ -98,11 +97,6 @@ public class Character : MapObject
             State state = new DeadState();
             state.Init(this);
             _stateMap[eStateType.DEAD] = state;
-        }
-        {
-            State state = new PathfindingMoveState();
-            state.Init(this);
-            _stateMap[eStateType.PathfindingMove] = state;
         }
         _state = _stateMap[eStateType.IDLE];
     }
@@ -297,5 +291,10 @@ public class Character : MapObject
     public TileCell GetTargetTileCell()
     {
         return _targetTileCell;
+    }
+
+    public void ResetTargetTileCell()
+    {
+        _targetTileCell = null;
     }
 }

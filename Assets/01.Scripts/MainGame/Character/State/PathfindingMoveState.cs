@@ -12,6 +12,6 @@ public class PathfindingMoveState : State {
             Debug.Log("TARGETTILECELL SETTING SUCCESS");
         }
 
-        _nextState = eStateType.IDLE;
+        //_character.ResetTargetTileCell();
 	}
 }

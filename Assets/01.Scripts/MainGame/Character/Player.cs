@@ -8,6 +8,24 @@ public class Player : Character
 	
 	void Start ()
     {
-        
-	}
+        base.InitState();
+
+        {
+            State state = new PathfindingIdleState();
+            state.Init(this);
+            _stateMap[eStateType.IDLE] = state;
+        }
+        {
+            State state = new PathfindingMoveState();
+            state.Init(this);
+            _stateMap[eStateType.MOVE] = state;
+        }
+        {
+            State state = new PathfindingState();
+            state.Init(this);
+            _stateMap[eStateType.PATHFINDING] = state;
+        }
+
+        _state = _stateMap[eStateType.IDLE];
+    }
 }

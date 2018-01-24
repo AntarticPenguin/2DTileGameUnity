@@ -13,11 +13,13 @@ public enum eTileLayer
 public class TileCell
 {
     Vector2 _position;
+    int _tileX;
+    int _tileY;
     List<List<MapObject>> _mapObjectMap = new List<List<MapObject>>();
 
     public void Init()
     {
-        for(int i = 0; i < (int)eTileLayer.MAXCOUNT; i++)
+        for (int i = 0; i < (int)eTileLayer.MAXCOUNT; i++)
         {
             List<MapObject> mapObjectlist = new List<MapObject>();
             _mapObjectMap.Add(mapObjectlist);
@@ -28,6 +30,15 @@ public class TileCell
     {
         _position.x = x;
         _position.y = y;
+    }
+
+    public int GetTileX() { return _tileX; }
+    public int GetTileY() { return _tileY; }
+
+    public void SetTilePosition(int tileX, int tileY)
+    {
+        _tileX = tileX;
+        _tileY = tileY;
     }
 
     public void AddObject(eTileLayer layer, MapObject mapObject)
@@ -55,7 +66,7 @@ public class TileCell
         for (int layer = 0; layer < (int)eTileLayer.MAXCOUNT; layer++)
         {
             List<MapObject> mapObjectList = _mapObjectMap[layer];
-            for(int i = 0; i < mapObjectList.Count; i++)
+            for (int i = 0; i < mapObjectList.Count; i++)
             {
                 if (false == mapObjectList[i].CanMove())
                     return false;
@@ -80,5 +91,24 @@ public class TileCell
             }
         }
         return collisionList;
+    }
+
+
+    //pathfinding
+    bool _isVisit = false;
+    int _distanceFromStart = 0;
+    int _distanceWeight = 1;
+
+    public void Visit() { _isVisit = true; }
+    public bool IsVisit() { return _isVisit; }
+    public void ResetVisit() { _isVisit = false; }
+    public void ResetHeuristic() { _distanceFromStart = 0; }
+    public int GetDistanceFromStart() { return _distanceFromStart; }
+    public int GetDistanceWeight() { return _distanceWeight; }
+
+    public void DrawColor()
+    {
+        List<MapObject> mapObjectList = _mapObjectMap[(int)eTileLayer.GROUND];
+        mapObjectList[0].transform.GetComponent<SpriteRenderer>().color = Color.blue;
     }
 }
