@@ -11,24 +11,37 @@ public class PathfindingState : State
     }
 
     Queue<sPathCommand> _pathfindingQueue = new Queue<sPathCommand>();
+    TileCell _targetTileCell;
 
     override public void Start()
     {
         base.Start();
 
         //시작타일셀을 큐에 넣는다.
-        TileMap map = GameManager.Instance.GetMap();
-        map.InitPathfinding();
-        //길찾기 관련 변수 초기화
+        if (null != _targetTileCell)
+        {
+            //길찾기 관련 변수 초기화
+            GameManager.Instance.GetMap().InitPathfinding();      //나중에 최적화: 체크가 된 부분만
 
+            //시작지점을 sPathCommand로 만들어서 큐에 삽입.
+            TileCell startCell = GameManager.Instance.GetMap().GetTileCell(_character.GetTileX(), _character.GetTileY());
 
-        //시작지점을 sPathCommand로 만들어서 큐에 삽입.
-        TileCell startCell = map.GetTileCell(_character.GetTileX(), _character.GetTileY());
-        sPathCommand startCommand;
-        startCommand.tileCell = startCell;
-        startCommand.prevTileCell = null;
+            sPathCommand startCommand;
+            startCommand.tileCell = startCell;
+            startCommand.prevTileCell = null;
+            _pathfindingQueue.Enqueue(startCommand);
+        }
+        else
+        {
+            _nextState = eStateType.IDLE;
+        }
+    }
 
-        _pathfindingQueue.Enqueue(startCommand);
+    public override void Stop()
+    {
+        base.Stop();
+        _pathfindingQueue.Clear();
+        _character.ResetTargetTileCell();
     }
 
     override public void Update()
@@ -56,13 +69,13 @@ public class PathfindingState : State
                 }
 
                 //4방향 검사
-                for(eMoveDirection direciton = 0; direciton <= eMoveDirection.DOWN; direciton++)
+                for(eMoveDirection direction = 0; direction <= eMoveDirection.DOWN; direction++)
                 {
                     int moveX = command.tileCell.GetTileX();
                     int moveY = command.tileCell.GetTileY();
 
                     //각 방향별 타일셀을 도출
-                    switch (direciton)
+                    switch (direction)
                     {
                         case eMoveDirection.LEFT:
                             moveX--;
@@ -83,18 +96,19 @@ public class PathfindingState : State
                     TileCell nextTileCell = map.GetTileCell(moveX, moveY);
                     if (true == nextTileCell.CanMove() && false == nextTileCell.IsVisit())
                     {
-                        //거리값 계산
-                        //int distanceFromStart = command.tileCell.GetDistanceFromStart() + command.tileCell.GetDistanceWeight();
+                        //거리기반
+                        float distanceFromStart = command.tileCell.GetDistanceFromStart() + command.tileCell.GetDistanceWeight();
 
                         /*새로운 커맨드를 만들어 큐에 삽입
                          *  새로운 커맨드에 이전 타일을 세팅(현재 타일이 이전 타일)
                          *      큐에 삽입
                          *      방향에 따라 찾은 타일은 거리값을 갱신
                          */
+                        nextTileCell.SetDistanceFromStart(distanceFromStart);
+
                         sPathCommand newCommand;
                         newCommand.tileCell = nextTileCell;
                         newCommand.prevTileCell = command.tileCell;
-                        //newCommand.tileCell.SetDistanceFromStart(distanceFromStart);
                         _pathfindingQueue.Enqueue(newCommand);
 
                         if (

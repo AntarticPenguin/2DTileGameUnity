@@ -96,15 +96,15 @@ public class TileCell
 
     //pathfinding
     bool _isVisit = false;
-    int _distanceFromStart = 0;
-    int _distanceWeight = 1;
+    float _distanceFromStart = 0.0f;
+    float _distanceWeight = 1.0f;
 
     public void Visit() { _isVisit = true; }
     public bool IsVisit() { return _isVisit; }
     public void ResetVisit() { _isVisit = false; }
     public void ResetHeuristic() { _distanceFromStart = 0; }
-    public int GetDistanceFromStart() { return _distanceFromStart; }
-    public int GetDistanceWeight() { return _distanceWeight; }
+    public float GetDistanceFromStart() { return _distanceFromStart; }
+    public float GetDistanceWeight() { return _distanceWeight; }
 
     public void DrawColor()
     {
