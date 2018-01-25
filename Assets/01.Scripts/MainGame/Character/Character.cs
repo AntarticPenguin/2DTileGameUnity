@@ -281,6 +281,7 @@ public class Character : MapObject
     //Pathfinding
 
     TileCell _targetTileCell = null;
+    Stack<TileCell> _pathTileCellStack = new Stack<TileCell>();
 
     public void SetTargetTileCell(int tileX, int tileY)
     {
@@ -296,5 +297,15 @@ public class Character : MapObject
     public void ResetTargetTileCell()
     {
         _targetTileCell = null;
+    }
+
+    public void PushPathTileCell(TileCell tileCell)
+    {
+        _pathTileCellStack.Push(tileCell);
+    }
+
+    public Stack<TileCell> GetPathTileCellStack()
+    {
+        return _pathTileCellStack;
     }
 }

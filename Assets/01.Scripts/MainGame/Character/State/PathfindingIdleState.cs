@@ -11,7 +11,13 @@ public class PathfindingIdleState : State
         GameObject cameraObject = _character.transform.Find("Main Camera").gameObject;
         camera = cameraObject.GetComponent<Camera>();
 
-        if (Input.GetButtonDown("Fire1"))
+        if(null != _character.GetTargetTileCell())
+        {
+            _nextState = eStateType.PATHFINDING;
+            return;
+        }
+
+        if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
@@ -23,7 +29,6 @@ public class PathfindingIdleState : State
                 int tileX = hitTile.GetTileX();
                 int tileY = hitTile.GetTileY();
                 _character.SetTargetTileCell(tileX, tileY);
-                _nextState = eStateType.PATHFINDING;
             }
         }
 	}

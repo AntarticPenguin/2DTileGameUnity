@@ -98,17 +98,33 @@ public class TileCell
     bool _isVisit = false;
     float _distanceFromStart = 0.0f;
     float _distanceWeight = 1.0f;
+    TileCell _prevTileCell = null;
+
+    public void ResetPathfinding()
+    {
+        _isVisit = false;
+        _distanceFromStart = 0.0f;
+        _prevTileCell = null;
+    }
 
     public void Visit() { _isVisit = true; }
     public bool IsVisit() { return _isVisit; }
-    public void ResetVisit() { _isVisit = false; }
-    public void ResetHeuristic() { _distanceFromStart = 0; }
     public float GetDistanceFromStart() { return _distanceFromStart; }
     public float GetDistanceWeight() { return _distanceWeight; }
+    public void SetDistanceFromStart(float distance) { _distanceFromStart = distance; }
+
+    public TileCell GetPrevTileCell() { return _prevTileCell; }
+    public void SetPrevTileCell(TileCell tileCell) { _prevTileCell = tileCell; }
 
     public void DrawColor()
     {
         List<MapObject> mapObjectList = _mapObjectMap[(int)eTileLayer.GROUND];
         mapObjectList[0].transform.GetComponent<SpriteRenderer>().color = Color.blue;
+    }
+
+    public void DrawColor2()
+    {
+        List<MapObject> mapObjectList = _mapObjectMap[(int)eTileLayer.GROUND];
+        mapObjectList[0].transform.GetComponent<SpriteRenderer>().color = Color.green;
     }
 }

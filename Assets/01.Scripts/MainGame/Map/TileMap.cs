@@ -164,14 +164,13 @@ public class TileMap : MonoBehaviour
 
     //pathfinding
 
-    public void InitPathfinding()
+    public void ResetPathfinding()
     {
         for(int y = 0; y < _height; y++)
         { 
             for(int x = 0; x < _width; x++)
             {
-                GetTileCell(x, y).ResetVisit();
-                GetTileCell(x, y).ResetHeuristic();
+                GetTileCell(x, y).ResetPathfinding();
             }
         }
     }
