@@ -25,6 +25,11 @@ public class Player : Character
             state.Init(this);
             _stateMap[eStateType.PATHFINDING] = state;
         }
+        {
+            State state = new PathBuildState();
+            state.Init(this);
+            _stateMap[eStateType.BUILD_PATH] = state;
+        }
 
         _state = _stateMap[eStateType.IDLE];
     }

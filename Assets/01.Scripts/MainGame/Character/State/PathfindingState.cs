@@ -4,16 +4,11 @@ using UnityEngine;
 
 public class PathfindingState : State
 {
-    enum eUpdateState
-    {
-        PATHFINDING,
-        BUILD_PATH,
-    }
-    struct sPathCommand
-    {
-        public TileCell tileCell;
-        public TileCell prevTileCell;
-    }
+    //enum eUpdateState
+    //{
+    //    PATHFINDING,
+    //    BUILD_PATH,
+    //}
 
     struct sPosition
     {
@@ -22,16 +17,15 @@ public class PathfindingState : State
     }
 
     Queue<TileCell> _pathfindingQueue = new Queue<TileCell>();
-    //Stack<TileCell> _pathfindingStack = new Stack<TileCell>();
     TileCell _targetTileCell;
-    TileCell _reverseTileCell;
+    //TileCell _reverseTileCell;
 
-    eUpdateState _updateState;
+    //eUpdateState _updateState;
 
     override public void Start()
     {
         base.Start();
-        _updateState = eUpdateState.PATHFINDING;
+        //_updateState = eUpdateState.PATHFINDING;
 
         _targetTileCell = _character.GetTargetTileCell();
 
@@ -62,15 +56,16 @@ public class PathfindingState : State
     {
         base.Update();
 
-        switch (_updateState)
-        {
-            case eUpdateState.PATHFINDING:
-                UpdatePathfinding();
-                break;
-            case eUpdateState.BUILD_PATH:
-                UpdateBuildPath();
-                break;
-        }
+        //switch (_updateState)
+        //{
+        //    case eUpdateState.PATHFINDING:
+        //        UpdatePathfinding();
+        //        break;
+        //    case eUpdateState.BUILD_PATH:
+        //        UpdateBuildPath();
+        //        break;
+        //}
+        UpdatePathfinding();
     }
 
     void UpdatePathfinding()
@@ -79,7 +74,6 @@ public class PathfindingState : State
         if (0 != _pathfindingQueue.Count)
         {
             //커맨드 하나를 꺼낸다
-            //sPathCommand command = _pathfindingQueue.Dequeue();
             TileCell tileCell = _pathfindingQueue.Dequeue();
 
             //커맨드에 포함된 타일셀이 방문되지 않은 경우에만 검사
@@ -92,8 +86,9 @@ public class PathfindingState : State
                 if ((_targetTileCell.GetTileX() == tileCell.GetTileX())
                     && (_targetTileCell.GetTileY() == tileCell.GetTileY()))
                 {
-                    _updateState = eUpdateState.BUILD_PATH;
-                    _reverseTileCell = _targetTileCell;
+                    //_reverseTileCell = _targetTileCell;
+                    //_updateState = eUpdateState.BUILD_PATH;
+                    _nextState = eStateType.BUILD_PATH;
                     return;
                 }
                 else
@@ -139,36 +134,28 @@ public class PathfindingState : State
         }
     }
 
-    void UpdateBuildPath()
-    {
-        //command 쓸 수 없는 이유
-        //command에서 prevTileCell을 가져온 다음 그 이후 prevTileCell을 가져올 수 없다.
-        //왜? 이전 command를 알아야 함. 그런데 이전 command를 알 수 있는 정보가 없다.
+    //void UpdateBuildPath()
+    //{
+    //    //command 쓸 수 없는 이유
+    //    //command에서 prevTileCell을 가져온 다음 그 이후 prevTileCell을 가져올 수 없다.
+    //    //왜? 이전 command를 알아야 함. 그런데 이전 command를 알 수 있는 정보가 없다.
 
-        //_reverseTileCell = command.tileCell;
-        //while (null != _reverseTileCell)
-        //{
-        //    _pathfindingStack.Push(_reverseTileCell);
-        //    _reverseTileCell = command.prevTileCell;
-        //}
+    //    if (null != _reverseTileCell)
+    //    {
+    //        _character.PushPathTileCell(_reverseTileCell);
 
-        if (null != _reverseTileCell)
-        {
-            //_pathfindingStack.Push(_reverseTileCell);
-            _character.PushPathTileCell(_reverseTileCell);
+    //        //경로를 그려준다
+    //        if (!(_reverseTileCell.GetTileX() == _targetTileCell.GetTileX()
+    //                && _reverseTileCell.GetTileY() == _targetTileCell.GetTileY()))
+    //            _reverseTileCell.DrawColor2();
 
-            //경로를 그려준다
-            if (!(_reverseTileCell.GetTileX() == _targetTileCell.GetTileX()
-                    && _reverseTileCell.GetTileY() == _targetTileCell.GetTileY()))
-                _reverseTileCell.DrawColor2();
-
-            _reverseTileCell = _reverseTileCell.GetPrevTileCell();
-        }
-        else
-        {
-            _nextState = eStateType.MOVE;
-        }
-    }
+    //        _reverseTileCell = _reverseTileCell.GetPrevTileCell();
+    //    }
+    //    else
+    //    {
+    //        _nextState = eStateType.MOVE;
+    //    }
+    //}
 
     //position
     sPosition GetPositionByDirection(sPosition position, eMoveDirection direction)

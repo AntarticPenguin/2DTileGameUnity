@@ -10,7 +10,9 @@ public class PathfindingMoveState : State {
     {
         base.Start();
         _pathTileCellStack = _character.GetPathTileCellStack();
-	}
+        _pathTileCellStack.Pop();       //처음위치 빼주기
+
+    }
 
     public override void Stop()
     {

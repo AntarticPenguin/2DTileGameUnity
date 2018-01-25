@@ -16,9 +16,6 @@ public class Character : MapObject
 {
     protected GameObject _characterView;
 
-    //protected int _tileX = 0;
-    //protected int _tileY = 0;
-
     protected bool _isLive = true;
     protected int _hp = 100;
 
