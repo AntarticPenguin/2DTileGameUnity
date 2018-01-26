@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class PathfindingState : State
 {
-    //enum eUpdateState
-    //{
-    //    PATHFINDING,
-    //    BUILD_PATH,
-    //}
+    struct sPathCommand
+    {
+        public TileCell tileCell;
+        public float heuristic;
+    }
 
     struct sPosition
     {
@@ -16,16 +16,13 @@ public class PathfindingState : State
         public int y;
     }
 
-    Queue<TileCell> _pathfindingQueue = new Queue<TileCell>();
+    //Queue<sPathCommand> _pathfindingQueue = new Queue<sPathCommand>();
+    List<sPathCommand> _pathfindingQueue = new List<sPathCommand>();
     TileCell _targetTileCell;
-    //TileCell _reverseTileCell;
-
-    //eUpdateState _updateState;
 
     override public void Start()
     {
         base.Start();
-        //_updateState = eUpdateState.PATHFINDING;
 
         _targetTileCell = _character.GetTargetTileCell();
 
@@ -37,7 +34,10 @@ public class PathfindingState : State
 
             //시작지점을 sPathCommand로 만들어서 큐에 삽입.
             TileCell startCell = GameManager.Instance.GetMap().GetTileCell(_character.GetTileX(), _character.GetTileY());
-            _pathfindingQueue.Enqueue(startCell);
+            sPathCommand command;
+            command.tileCell = startCell;
+            command.heuristic = 0.0f;
+            PushCommand(command);
         }
         else
         {
@@ -49,22 +49,11 @@ public class PathfindingState : State
     {
         base.Stop();
         _pathfindingQueue.Clear();
-        _character.ResetTargetTileCell();
     }
 
     override public void Update()
     {
         base.Update();
-
-        //switch (_updateState)
-        //{
-        //    case eUpdateState.PATHFINDING:
-        //        UpdatePathfinding();
-        //        break;
-        //    case eUpdateState.BUILD_PATH:
-        //        UpdateBuildPath();
-        //        break;
-        //}
         UpdatePathfinding();
     }
 
@@ -74,20 +63,19 @@ public class PathfindingState : State
         if (0 != _pathfindingQueue.Count)
         {
             //커맨드 하나를 꺼낸다
-            TileCell tileCell = _pathfindingQueue.Dequeue();
+            sPathCommand command = _pathfindingQueue[0];
+            _pathfindingQueue.RemoveAt(0);
 
             //커맨드에 포함된 타일셀이 방문되지 않은 경우에만 검사
-            if (false == tileCell.IsVisit())
+            if (false == command.tileCell.IsVisit())
             {
                 //방문 표시
-                tileCell.Visit();
+                command.tileCell.Visit();
 
                 //목표에 도달했으면 종료
-                if ((_targetTileCell.GetTileX() == tileCell.GetTileX())
-                    && (_targetTileCell.GetTileY() == tileCell.GetTileY()))
+                if ((_targetTileCell.GetTileX() == command.tileCell.GetTileX())
+                    && (_targetTileCell.GetTileY() == command.tileCell.GetTileY()))
                 {
-                    //_reverseTileCell = _targetTileCell;
-                    //_updateState = eUpdateState.BUILD_PATH;
                     _nextState = eStateType.BUILD_PATH;
                     return;
                 }
@@ -98,8 +86,8 @@ public class PathfindingState : State
                     {
                         //각 방향별 타일셀을 도출
                         sPosition curPosition;
-                        curPosition.x = tileCell.GetTileX();
-                        curPosition.y = tileCell.GetTileY();
+                        curPosition.x = command.tileCell.GetTileX();
+                        curPosition.y = command.tileCell.GetTileY();
                         sPosition nextPosition = GetPositionByDirection(curPosition, direction);
 
                         //지나갈 수 있고, 방문되지 않은 타일
@@ -108,24 +96,40 @@ public class PathfindingState : State
                         if (true == nextTileCell.CanMove() && false == nextTileCell.IsVisit())
                         {
                             //거리기반
-                            float distanceFromStart = tileCell.GetDistanceFromStart() + tileCell.GetDistanceWeight();
+                            float distanceFromStart = command.tileCell.GetDistanceFromStart()
+                                + command.tileCell.GetDistanceWeight();
 
                             /*새로운 커맨드를 만들어 큐에 삽입
                              *  새로운 커맨드에 이전 타일을 세팅(현재 타일이 이전 타일)
                              *      큐에 삽입
                              *      방향에 따라 찾은 타일은 거리값을 갱신
                              */
-                            nextTileCell.SetDistanceFromStart(distanceFromStart);
-
-                            nextTileCell.SetPrevTileCell(tileCell);
-                            _pathfindingQueue.Enqueue(nextTileCell);
-
-                            if ( !(nextTileCell.GetTileX() == _targetTileCell.GetTileX()
-                                && nextTileCell.GetTileY() == _targetTileCell.GetTileY())
-                              )
+                            
+                            if(null == nextTileCell.GetPrevTileCell())
                             {
+                                nextTileCell.SetDistanceFromStart(distanceFromStart);
+                                nextTileCell.SetPrevTileCell(command.tileCell);
+
                                 //검색범위를 그려준다.
                                 nextTileCell.DrawColor();
+
+                                sPathCommand newCommand;
+                                newCommand.tileCell = nextTileCell;
+                                newCommand.heuristic = distanceFromStart;
+                                PushCommand(newCommand);
+                            }
+                            else
+                            {
+                                if (distanceFromStart < nextTileCell.GetDistanceFromStart())
+                                {
+                                    nextTileCell.SetDistanceFromStart(distanceFromStart);
+                                    nextTileCell.SetPrevTileCell(command.tileCell);
+
+                                    sPathCommand newCommand;
+                                    newCommand.tileCell = nextTileCell;
+                                    newCommand.heuristic = distanceFromStart;
+                                    PushCommand(newCommand);
+                                }
                             }
                         }
                     }
@@ -134,28 +138,23 @@ public class PathfindingState : State
         }
     }
 
-    //void UpdateBuildPath()
-    //{
-    //    //command 쓸 수 없는 이유
-    //    //command에서 prevTileCell을 가져온 다음 그 이후 prevTileCell을 가져올 수 없다.
-    //    //왜? 이전 command를 알아야 함. 그런데 이전 command를 알 수 있는 정보가 없다.
+    void PushCommand(sPathCommand command)
+    {
+        _pathfindingQueue.Add(command);
 
-    //    if (null != _reverseTileCell)
-    //    {
-    //        _character.PushPathTileCell(_reverseTileCell);
+        //sorting
+        //heuristic 값이 더 적은 것을 앞으로 오게 sorting
+        //sorting 검색해서(MSDN)
+        _pathfindingQueue.Sort(CompareHeuristic);
+    }
 
-    //        //경로를 그려준다
-    //        if (!(_reverseTileCell.GetTileX() == _targetTileCell.GetTileX()
-    //                && _reverseTileCell.GetTileY() == _targetTileCell.GetTileY()))
-    //            _reverseTileCell.DrawColor2();
+    int CompareHeuristic(sPathCommand command1, sPathCommand command2)
+    {
+        float x = command1.heuristic;
+        float y = command1.heuristic;
 
-    //        _reverseTileCell = _reverseTileCell.GetPrevTileCell();
-    //    }
-    //    else
-    //    {
-    //        _nextState = eStateType.MOVE;
-    //    }
-    //}
+        return x.CompareTo(y);
+    }
 
     //position
     sPosition GetPositionByDirection(sPosition position, eMoveDirection direction)

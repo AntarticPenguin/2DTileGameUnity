@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PathBuildState : State
 {
-    TileCell _reverseTileCell;
+    TileCell _reverseTileCell = null;
 
 
     override public void Start ()
@@ -14,9 +14,10 @@ public class PathBuildState : State
         _reverseTileCell = _character.GetTargetTileCell();
     }
 
-    public override void Stop()
+    override public void Stop()
     {
         base.Stop();
+        _character.ResetTargetTileCell();
     }
 
     override public void Update ()
