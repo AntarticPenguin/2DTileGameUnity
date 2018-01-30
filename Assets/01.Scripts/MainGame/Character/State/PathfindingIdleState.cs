@@ -28,7 +28,10 @@ public class PathfindingIdleState : State
                 TileObject hitTile = hit.transform.GetComponent<TileObject>();
                 int tileX = hitTile.GetTileX();
                 int tileY = hitTile.GetTileY();
-                _character.SetTargetTileCell(tileX, tileY);
+
+                TileCell hitCell = GameManager.Instance.GetMap().GetTileCell(tileX, tileY);
+                if(true == hitCell.CanMove())               
+                    _character.SetTargetTileCell(tileX, tileY);
             }
         }
 	}

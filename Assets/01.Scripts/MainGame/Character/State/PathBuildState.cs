@@ -22,21 +22,22 @@ public class PathBuildState : State
 
     override public void Update ()
     {
-        while(null != _reverseTileCell)
-        {
-            if (null != _reverseTileCell.GetPrevTileCell())
-            {
-                _character.PushPathTileCell(_reverseTileCell);
+        UpdateBuildPath();
+    }
 
-                //경로를 그려준다
-                //_reverseTileCell.DrawColor2();
-                _reverseTileCell = _reverseTileCell.GetPrevTileCell();
-            }
-            else
-            {
-                _nextState = eStateType.MOVE;
-                break; ;
-            }
+    protected void UpdateBuildPath()
+    {
+        if (null != _reverseTileCell.GetPrevTileCell())
+        {
+            _character.PushPathTileCell(_reverseTileCell);
+
+            //경로를 그려준다
+            //_reverseTileCell.DrawColor2();
+            _reverseTileCell = _reverseTileCell.GetPrevTileCell();
+        }
+        else
+        {
+            _nextState = eStateType.MOVE;
         }
     }
 }
