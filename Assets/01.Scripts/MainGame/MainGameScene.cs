@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+public struct sPosition     //리팩토링 대상
+{
+    public int x;
+    public int y;
+}
+
 public class MainGameScene : MonoBehaviour
 {
     public MainGameUI GameUI;

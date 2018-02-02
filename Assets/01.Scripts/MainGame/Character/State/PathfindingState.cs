@@ -10,12 +10,6 @@ public class PathfindingState : State
         public float heuristic;
     }
 
-    struct sPosition
-    {
-        public int x;
-        public int y;
-    }
-
     protected List<sPathCommand> _pathfindingQueue = new List<sPathCommand>();
     TileCell _targetTileCell;
 
@@ -92,7 +86,7 @@ public class PathfindingState : State
                         //지나갈 수 있고, 방문되지 않은 타일
                         TileMap map = GameManager.Instance.GetMap();
                         TileCell nextTileCell = map.GetTileCell(nextPosition.x, nextPosition.y);
-                        if (true == nextTileCell.CanMove() && false == nextTileCell.IsVisit())
+                        if (true == nextTileCell.IsPathfindable() && false == nextTileCell.IsVisit() && null != nextTileCell)
                         {
                             //거리기반
                             float distanceFromStart = command.tileCell.GetDistanceFromStart()

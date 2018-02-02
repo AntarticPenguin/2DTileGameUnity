@@ -28,25 +28,42 @@ public class PathfindingMoveState : State {
         {
             TileCell tileCell = _pathTileCellStack.Pop();
 
-            int fromX = _character.GetTileX();
-            int fromY = _character.GetTileY();
-            int toX = tileCell.GetTileX();
-            int toY = tileCell.GetTileY();
+            sPosition curPosition;
+            curPosition.x = _character.GetTileX();
+            curPosition.y = _character.GetTileY();
 
-            if (toX < fromX)
-                _character.SetNextDirection(eMoveDirection.LEFT);
-            else if(fromX < toX)
-                _character.SetNextDirection(eMoveDirection.RIGHT);
-            else if (toY < fromY)
-                _character.SetNextDirection(eMoveDirection.DOWN);
-            else if (fromY < toY)
-                _character.SetNextDirection(eMoveDirection.UP);
+            sPosition nextPosition;
+            nextPosition.x = tileCell.GetTileX();
+            nextPosition.y = tileCell.GetTileY();
 
-            _character.MoveStart(tileCell.GetTileX(), tileCell.GetTileY());
+            eMoveDirection direction = GetDirection(curPosition, nextPosition);
+            _character.SetNextDirection(direction);
+
+            if (false == _character.MoveStart(tileCell.GetTileX(), tileCell.GetTileY()))
+            {
+                if (true == _character.IsAttackCoolDown())
+                    _nextState = eStateType.ATTACK;
+                else
+                    _nextState = eStateType.IDLE;
+            }
         }
         else
         {
             _nextState = eStateType.IDLE;
         }
+    }
+
+    eMoveDirection GetDirection(sPosition curPosition, sPosition nextPosition)
+    {
+        if (nextPosition.x > curPosition.x)
+            return eMoveDirection.RIGHT;
+        else if (curPosition.x > nextPosition.x)
+            return eMoveDirection.LEFT;
+        else if (curPosition.y > nextPosition.y)
+            return eMoveDirection.DOWN;
+        else if (nextPosition.y > curPosition.y)
+            return eMoveDirection.UP;
+
+        return eMoveDirection.UP;
     }
 }

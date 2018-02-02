@@ -27,12 +27,11 @@ public class PathBuildState : State
 
     protected void UpdateBuildPath()
     {
-        if (null != _reverseTileCell.GetPrevTileCell())
+        if (null != _reverseTileCell)
         {
-            _character.PushPathTileCell(_reverseTileCell);
-
             //경로를 그려준다
             //_reverseTileCell.DrawColor2();
+            _character.PushPathTileCell(_reverseTileCell);
             _reverseTileCell = _reverseTileCell.GetPrevTileCell();
         }
         else

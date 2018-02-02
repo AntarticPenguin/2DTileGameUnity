@@ -6,6 +6,7 @@ public enum eMapObjectType
 {
     NONE,
     MONSTER,
+    TILE_OBJECT,
 }
 
 public class MapObject : MonoBehaviour

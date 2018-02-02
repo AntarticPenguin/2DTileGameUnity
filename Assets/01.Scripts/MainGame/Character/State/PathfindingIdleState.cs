@@ -30,7 +30,7 @@ public class PathfindingIdleState : State
                 int tileY = hitTile.GetTileY();
 
                 TileCell hitCell = GameManager.Instance.GetMap().GetTileCell(tileX, tileY);
-                if(true == hitCell.CanMove())               
+                if(true == hitCell.IsPathfindable())               
                     _character.SetTargetTileCell(tileX, tileY);
             }
         }
