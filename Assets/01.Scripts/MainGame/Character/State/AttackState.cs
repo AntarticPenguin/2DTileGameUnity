@@ -8,34 +8,22 @@ public class AttackState : State
     {
         base.Start();
 
-        int moveX = _character.GetTileX();
-        int moveY = _character.GetTileY();
+        SoundPlayer.Instance.playEffect("player_hit");
 
-        switch (_character.GetNextDirection())
-        {
-            case eMoveDirection.LEFT:
-                moveX--;
-                break;
-            case eMoveDirection.RIGHT:
-                moveX++;
-                break;
-            case eMoveDirection.UP:
-                moveY++;
-                break;
-            case eMoveDirection.DOWN:
-                moveY--;
-                break;
-        }
+        sPosition position;
+        position.x = _character.GetTileX();
+        position.y = _character.GetTileY();
+        
+        sPosition nextPosition = GlobalUtility.GetPositionByDirection(position, _character.GetNextDirection());
 
         TileMap map = GameManager.Instance.GetMap();
-        List<MapObject> collisionList = map.GetCollisionList(moveX, moveY);
+        List<MapObject> collisionList = map.GetCollisionList(nextPosition.x, nextPosition.y);
         for (int i = 0; i < collisionList.Count; i++)
         {
             switch (collisionList[i].GetObjectType())
             {
                 case eMapObjectType.MONSTER:
                     _character.Attack(collisionList[i]);
-                    Debug.Log("Attack");
                     break;
             }
         }

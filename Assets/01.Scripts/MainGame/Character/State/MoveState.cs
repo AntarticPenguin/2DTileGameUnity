@@ -8,35 +8,50 @@ public class MoveState : State
     {
         base.Start();
 
-        int moveX = _character.GetTileX();
-        int moveY = _character.GetTileY();
+        sPosition position;
+        position.x = _character.GetTileX();
+        position.y = _character.GetTileY();
 
-        switch (_character.GetNextDirection())
+        sPosition nextPosition = GlobalUtility.GetPositionByDirection(position, _character.GetNextDirection());
+        eMoveDirection nextDirection = GlobalUtility.GetDirection(position, nextPosition);
+        _character.SetNextDirection(nextDirection);
+
+        List<MapObject> collisionList = GameManager.Instance.GetMap().GetCollisionList(nextPosition.x, nextPosition.y);
+        if (0 != collisionList.Count)
         {
-            case eMoveDirection.LEFT:
-                moveX--;
-                break;
-            case eMoveDirection.RIGHT:
-                moveX++;
-                break;
-            case eMoveDirection.UP:
-                moveY++;
-                break;
-            case eMoveDirection.DOWN:
-                moveY--;
-                break;
-        }
-        if (false == _character.MoveStart(moveX, moveY))
-        {
-            if (true == _character.IsAttackCoolDown())
-                _nextState = eStateType.ATTACK;
-            else
-                _nextState = eStateType.IDLE;
+            for (int i = 0; i < collisionList.Count; i++)
+            {
+                switch (collisionList[i].GetObjectType())
+                {
+                    case eMapObjectType.MONSTER:
+                        if (true == _character.IsAttackCoolDown())
+                            _nextState = eStateType.ATTACK;
+                        else
+                            _nextState = eStateType.IDLE;
+                        break;
+
+                    default:
+                        _nextState = eStateType.IDLE;
+                        break;
+                }
+            }
         }
         else
         {
-            _character.SetNextDirection(eMoveDirection.NONE);
-            _nextState = eStateType.IDLE;
+            _character.MoveStart(nextPosition.x, nextPosition.y);
         }
+
+        //if (false == _character.MoveStart(nextPosition.x, nextPosition.y))
+        //{
+        //    if (true == _character.IsAttackCoolDown())
+        //        _nextState = eStateType.ATTACK;
+        //    else
+        //        _nextState = eStateType.IDLE;
+        //}
+        //else
+        //{
+        //    _character.SetNextDirection(eMoveDirection.NONE);
+        //    _nextState = eStateType.IDLE;
+        //}
     }
 }
