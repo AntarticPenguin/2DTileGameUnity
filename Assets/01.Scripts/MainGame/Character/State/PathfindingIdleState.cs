@@ -26,8 +26,9 @@ public class PathfindingIdleState : State
 
             if (Physics.Raycast(ray, out hit))
             {
-                hit.transform.GetComponent<SpriteRenderer>().color = Color.red;
-                string filePath = "Prefabs/Effect/CursorEffect";
+                //hit.transform.GetComponent<SpriteRenderer>().color = Color.red;
+
+                string filePath = "Prefabs/Effect/DamageEffect";
 
                 Vector3 pos = new Vector3(hit.transform.position.x, hit.transform.position.y, 1);
 

@@ -39,5 +39,4 @@ public class MainGameUI : MonoBehaviour {
         Slider slider = sliderObject.GetComponent<Slider>();
         return slider;
     }
-
 }
