@@ -36,37 +36,34 @@ public class PathfindingMoveState : State {
             nextPosition.x = tileCell.GetTileX();
             nextPosition.y = tileCell.GetTileY();
 
-            eMoveDirection direction = GlobalUtility.GetDirection(curPosition, nextPosition);
+            eMoveDirection direction = GetDirection(curPosition, nextPosition);
             _character.SetNextDirection(direction);
 
-            List<MapObject> collisionList = GameManager.Instance.GetMap().GetCollisionList(nextPosition.x, nextPosition.y);
-            if (0 != collisionList.Count)
+            if (false == _character.MoveStart(tileCell.GetTileX(), tileCell.GetTileY()))
             {
-                for(int i = 0; i < collisionList.Count; i++)
-                {
-                    switch(collisionList[i].GetObjectType())
-                    {
-                        case eMapObjectType.MONSTER:
-                            if (true == _character.IsAttackCoolDown())
-                                _nextState = eStateType.ATTACK;
-                            else
-                                _nextState = eStateType.IDLE;
-                            break;
-
-                        default:
-                            _nextState = eStateType.IDLE;
-                            break;
-                    }
-                }
-            }
-            else
-            {
-                _character.MoveStart(nextPosition.x, nextPosition.y);
+                if (true == _character.IsAttackCoolDown())
+                    _nextState = eStateType.ATTACK;
+                else
+                    _nextState = eStateType.IDLE;
             }
         }
         else
         {
             _nextState = eStateType.IDLE;
         }
+    }
+
+    eMoveDirection GetDirection(sPosition curPosition, sPosition nextPosition)
+    {
+        if (nextPosition.x > curPosition.x)
+            return eMoveDirection.RIGHT;
+        else if (curPosition.x > nextPosition.x)
+            return eMoveDirection.LEFT;
+        else if (curPosition.y > nextPosition.y)
+            return eMoveDirection.DOWN;
+        else if (nextPosition.y > curPosition.y)
+            return eMoveDirection.UP;
+
+        return eMoveDirection.UP;
     }
 }

@@ -58,15 +58,8 @@ public class Character : MapObject
 
         TileMap map = GameManager.Instance.GetMap();
 
-        int tileX = Random.Range(1, map.GetWidth() - 2);
-        int tileY = Random.Range(1, map.GetWidth() - 2);
-        while(false == map.CanMoveTile(tileX, tileY))
-        {
-            tileX = Random.Range(1, map.GetWidth() - 2);
-            tileY = Random.Range(1, map.GetWidth() - 2);
-        }
-        _tileX = tileX;
-        _tileY = tileY;
+        _tileX = Random.Range(1, map.GetWidth() - 2);
+        _tileY = Random.Range(1, map.GetHeight() - 2);
         map.SetObject(_tileX, _tileY, this, eTileLayer.MIDDLE);
 
         InitState();
@@ -130,7 +123,7 @@ public class Character : MapObject
     public eMoveDirection GetNextDirection() { return _nextDirection; }
     public void SetNextDirection(eMoveDirection direction) { _nextDirection = direction; }
 
-    public void MoveStart(int tileX, int tileY)
+    public bool MoveStart(int tileX, int tileY)
     {
         string animationTrigger = "up";
 
@@ -148,13 +141,18 @@ public class Character : MapObject
 
         _characterView.GetComponent<Animator>().SetTrigger(animationTrigger);
 
+        TileMap map = GameManager.Instance.GetMap();
+        List<MapObject> collisionList = map.GetCollisionList(tileX, tileY);
+        if (0 == collisionList.Count)
         {
-            TileMap map = GameManager.Instance.GetMap();
             map.ResetObject(_tileX, _tileY, this);
             _tileX = tileX;
             _tileY = tileY;
             map.SetObject(_tileX, _tileY, this, eTileLayer.MIDDLE);
+
+            return true;
         }
+        return false;
     }
 
 
@@ -221,11 +219,6 @@ public class Character : MapObject
 
     public void DecreaseHP(int damagedPoint)
     {
-        string filePath = "Prefabs/Effect/DamageEffect";
-        GameObject effectPrefab = Resources.Load<GameObject>(filePath);
-        GameObject effectObject = GameObject.Instantiate(effectPrefab, transform.position, Quaternion.identity);
-        GameObject.Destroy(effectObject, 1.0f);
-
         _characterView.GetComponent<SpriteRenderer>().color = Color.red;
         Invoke("ResetColor", 0.1f);
 

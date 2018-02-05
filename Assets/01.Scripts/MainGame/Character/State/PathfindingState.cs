@@ -81,13 +81,12 @@ public class PathfindingState : State
                         sPosition curPosition;
                         curPosition.x = command.tileCell.GetTileX();
                         curPosition.y = command.tileCell.GetTileY();
-                        sPosition nextPosition = GlobalUtility.GetPositionByDirection(curPosition, direction);
+                        sPosition nextPosition = GetPositionByDirection(curPosition, direction);
 
                         //지나갈 수 있고, 방문되지 않은 타일
                         TileMap map = GameManager.Instance.GetMap();
                         TileCell nextTileCell = map.GetTileCell(nextPosition.x, nextPosition.y);
-                        if ((null != nextTileCell) && (true == nextTileCell.IsPathfindable() && false == nextTileCell.IsVisit() ||
-                            (nextTileCell.GetTileX() == _targetTileCell.GetTileX() && nextTileCell.GetTileY() == _targetTileCell.GetTileY())) )
+                        if (true == nextTileCell.IsPathfindable() && false == nextTileCell.IsVisit() && null != nextTileCell)
                         {
                             //거리기반
                             float distanceFromStart = command.tileCell.GetDistanceFromStart()
@@ -199,5 +198,34 @@ public class PathfindingState : State
     float CalAstarHeuristic(float distanceFromStart, TileCell nextTileCell, TileCell targetTileCell)
     {
         return distanceFromStart + CalComplexHeuristic(nextTileCell, targetTileCell);
+    }
+
+    //position
+    sPosition GetPositionByDirection(sPosition position, eMoveDirection direction)
+    {
+        int moveX = position.x;
+        int moveY = position.y;
+
+        switch (direction)
+        {
+            case eMoveDirection.LEFT:
+                moveX--;
+                break;
+            case eMoveDirection.RIGHT:
+                moveX++;
+                break;
+            case eMoveDirection.UP:
+                moveY++;
+                break;
+            case eMoveDirection.DOWN:
+                moveY--;
+                break;
+        }
+
+        sPosition newPosition;
+        newPosition.x = moveX;
+        newPosition.y = moveY;
+
+        return newPosition;
     }
 }

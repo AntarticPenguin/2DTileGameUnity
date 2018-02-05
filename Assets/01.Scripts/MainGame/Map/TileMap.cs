@@ -101,7 +101,6 @@ public class TileMap : MonoBehaviour
 
                         TileObject tileObject = tileGameObject.GetComponent<TileObject>();
                         tileObject.Init(_spriteArray[spriteIndex]);
-                        tileObject.SetTilePosition(x, y);
                         tileObject.SetCanMove(false);
 
                         GetTileCell(x, y).AddObject(eTileLayer.GROUND, tileObject);
@@ -156,7 +155,7 @@ public class TileMap : MonoBehaviour
         //2층(랜덤)
         {
             //1. 일정간격으로 기둥을 박는다.
-            int interval = 4;
+            int interval = 2;
             for (int y = 0; y < _height; y++)
             {
                 if (0 == y % interval)
@@ -174,7 +173,6 @@ public class TileMap : MonoBehaviour
 
                             TileObject tileObject = tileGameObject.GetComponent<TileObject>();
                             tileObject.Init(_spriteArray[spriteIndex]);
-                            tileObject.SetTilePosition(x, y);
                             tileObject.SetCanMove(false);
 
                             GetTileCell(x, y).AddObject(eTileLayer.GROUND, tileObject);
@@ -194,18 +192,30 @@ public class TileMap : MonoBehaviour
                         if (false == IsConnectedCell(x, y))
                         {
                             //랜덤한 한 방향으로 기둥이 연결될떄까지 이어준다
-                            eMoveDirection direction = (eMoveDirection)Random.Range((int)eMoveDirection.LEFT, (int)eMoveDirection.DOWN + 1);
+                            eMoveDirection direction = (eMoveDirection)Random.Range(1, (int)eMoveDirection.DOWN);
 
-                            sPosition searchPosition;
-                            searchPosition.x = x;
-                            searchPosition.y = y;
+                            int searchTileX = x;
+                            int searchTileY = y;
 
-                            //while (false == IsConnectedCell(searchPosition.x, searchPosition.y))
-                            while (false == IsConnectedCellOnDirection(searchPosition.x, searchPosition.y, direction))
+                            while (false == IsConnectedCell(searchTileX, searchTileY))
                             {
-                                sPosition nextPosition = GlobalUtility.GetPositionByDirection(searchPosition, (eMoveDirection)direction);
+                                switch (direction)
+                                {
+                                    case eMoveDirection.LEFT:
+                                        searchTileX--;
+                                        break;
+                                    case eMoveDirection.RIGHT:
+                                        searchTileX++;
+                                        break;
+                                    case eMoveDirection.UP:
+                                        searchTileY++;
+                                        break;
+                                    case eMoveDirection.DOWN:
+                                        searchTileY--;
+                                        break;
+                                }
 
-                                if (0 <= nextPosition.x && nextPosition.x < _width && 0 <= nextPosition.y && nextPosition.y < _height)
+                                if (0 <= searchTileX && searchTileX < _width && 0 <= searchTileY && searchTileY < _height)
                                 {
                                     //새로운 기둥을 심는다.
                                     int spriteIndex = 252;
@@ -217,14 +227,10 @@ public class TileMap : MonoBehaviour
 
                                     TileObject tileObject = tileGameObject.GetComponent<TileObject>();
                                     tileObject.Init(_spriteArray[spriteIndex]);
-                                    tileObject.SetTilePosition(nextPosition.x, nextPosition.y);
                                     tileObject.SetCanMove(false);
 
-                                    GetTileCell(nextPosition.x, nextPosition.y).AddObject(eTileLayer.GROUND, tileObject);
+                                    GetTileCell(searchTileX, searchTileY).AddObject(eTileLayer.GROUND, tileObject);
                                 }
-                                
-                                direction = (eMoveDirection)Random.Range((int)eMoveDirection.LEFT, (int)eMoveDirection.DOWN + 1);
-                                searchPosition = nextPosition;
                             }
                         }
                     }
@@ -236,42 +242,35 @@ public class TileMap : MonoBehaviour
     bool IsConnectedCell(int tileX, int tileY)
     {
         //주변에 하나라도 붙은 기둥이 있으면 연결된 기둥
-        for (int direction = (int)eMoveDirection.LEFT; direction < (int)eMoveDirection.DOWN + 1; direction++)
+        for (int direction = (int)eMoveDirection.LEFT; direction <= (int)eMoveDirection.DOWN; direction++)
         {
-            sPosition position;
-            position.x = tileX;
-            position.y = tileY;
+            int searchTileX = tileX;
+            int searchTileY = tileY;
 
-            sPosition nextPosition = GlobalUtility.GetPositionByDirection(position, (eMoveDirection)direction);
-
-            if (0 <= nextPosition.x && nextPosition.x < _width && 0 <= nextPosition.y && nextPosition.y < _height)
+            switch ((eMoveDirection)direction)
             {
-                if (false == GetTileCell(nextPosition.x, nextPosition.y).IsPathfindable())
+                case eMoveDirection.LEFT:
+                    searchTileX--;
+                    break;
+                case eMoveDirection.RIGHT:
+                    searchTileX++;
+                    break;
+                case eMoveDirection.UP:
+                    searchTileY++;
+                    break;
+                case eMoveDirection.DOWN:
+                    searchTileY--;
+                    break;
+            }
+
+            if (0 <= searchTileX && searchTileX < _width && 0 <= searchTileY && searchTileY < _height)
+            {
+                if (false == GetTileCell(searchTileX, searchTileY).IsPathfindable())
                     return true;
             }
             else
                 return true;    //맵 밖
         }
-        return false;
-    }
-
-    bool IsConnectedCellOnDirection(int tileX, int tileY, eMoveDirection direction)
-    {
-        //진행방향으로만 붙어있는 타일 체크
-        sPosition position;
-        position.x = tileX;
-        position.y = tileY;
-
-        sPosition nextPosition = GlobalUtility.GetPositionByDirection(position, (eMoveDirection)direction);
-
-        if (0 <= nextPosition.x && nextPosition.x < _width && 0 <= nextPosition.y && nextPosition.y < _height)
-        {
-            if (false == GetTileCell(nextPosition.x, nextPosition.y).IsPathfindable())
-                return true;
-        }
-        else
-            return true;    //맵 밖
-
         return false;
     }
 
