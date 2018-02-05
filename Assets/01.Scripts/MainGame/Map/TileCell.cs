@@ -135,11 +135,13 @@ public class TileCell
             List<MapObject> mapObjectList = _mapObjectMap[layer];
             for (int i = 0; i < mapObjectList.Count; i++)
             {
-                if (eMapObjectType.MONSTER != mapObjectList[i].GetObjectType()
-                    && false == mapObjectList[i].CanMove())
-                {
+                //if (eMapObjectType.MONSTER != mapObjectList[i].GetObjectType()
+                //    && false == mapObjectList[i].CanMove())
+                //{
+                //    return false;
+                //}
+                if (false == mapObjectList[i].CanMove())
                     return false;
-                }
             }
         }
         return true;

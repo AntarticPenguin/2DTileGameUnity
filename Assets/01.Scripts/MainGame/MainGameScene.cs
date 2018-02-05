@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public struct sPosition     //리팩토링 대상
-{
-    public int x;
-    public int y;
-}
-
 public class MainGameScene : MonoBehaviour
 {
     public MainGameUI GameUI;
@@ -34,7 +27,7 @@ public class MainGameScene : MonoBehaviour
         _tileMap.Init();
         GameManager.Instance.SetMap(_tileMap);
 
-        Character player = CreateCharacter("Player", "character01");
+        Character player = CreateCharacter("Player", "character03");
         Character monster = CreateCharacter("Monster", "character02");
         player.BecomeViewer();
     }
