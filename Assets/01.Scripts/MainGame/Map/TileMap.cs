@@ -24,9 +24,9 @@ public class TileMap : MonoBehaviour
 
     public void Init()
     {
-        _spriteArray = Resources.LoadAll<Sprite>("Sprites/MapSprite");
-        //CreateTiles();
-        CreateRandomMaze();
+        _spriteArray = Resources.LoadAll<Sprite>("Sprites/MapSprite01");
+        CreateTiles();
+        //CreateRandomMaze();
     }
 
 

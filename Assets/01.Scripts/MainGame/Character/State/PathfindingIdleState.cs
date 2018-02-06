@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PathfindingIdleState : State
 {
@@ -19,14 +20,17 @@ public class PathfindingIdleState : State
 
         if (Input.GetMouseButtonDown(0))
         {
-            
-
             RaycastHit hit;
             Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hit))
             {
-                //hit.transform.GetComponent<SpriteRenderer>().color = Color.red;
+                if(EventSystem.current.IsPointerOverGameObject())
+                {
+                    Debug.Log("Clicked on the UI");
+                    return;
+                }
+
 
                 string filePath = "Prefabs/Effect/DamageEffect";
 
