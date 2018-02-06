@@ -10,8 +10,8 @@ public class DamagedState : State
 
         int damagedPoint = _character.GetDamagedPoint();
         _character.DecreaseHP(damagedPoint);
-        
-        if(false == _character.IsLive())
+   
+        if (false == _character.IsLive())
         {
             _nextState = eStateType.DEAD;
         }

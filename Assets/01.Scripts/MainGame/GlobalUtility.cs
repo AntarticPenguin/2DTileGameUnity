@@ -46,9 +46,9 @@ static class GlobalUtility
         else if (curPosition.x > nextPosition.x)
             return eMoveDirection.LEFT;
         else if (curPosition.y > nextPosition.y)
-            return eMoveDirection.DOWN;
-        else if (nextPosition.y > curPosition.y)
             return eMoveDirection.UP;
+        else if (nextPosition.y > curPosition.y)
+            return eMoveDirection.DOWN;
 
         return eMoveDirection.UP;
     }

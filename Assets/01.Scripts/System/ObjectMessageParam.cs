@@ -8,4 +8,5 @@ public class MessageParam
     public MapObject receiver;
     public string message;
     public int attackPoint;
+    public int expPoint;
 }

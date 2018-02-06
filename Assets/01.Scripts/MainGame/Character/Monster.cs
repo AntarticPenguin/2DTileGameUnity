@@ -9,6 +9,10 @@ public class Monster : Character
     void Start()
     {
         _type = eMapObjectType.MONSTER;
+
+        _expPoint = 101;
+
+        _dropItemIndex = 10;
     }
 
     override public void InitState()

@@ -17,9 +17,6 @@ public class Character : MapObject
     protected GameObject _characterView;
 
     protected bool _isLive = true;
-    protected int _hp = 100;
-
-    protected int _attackPoint = 10;
 
     // Use this for initialization
     void Start ()
@@ -166,16 +163,61 @@ public class Character : MapObject
         {
             case "Attack":
                 _damagedPoint = msgParam.attackPoint;
+                _whoAttackedMe = (Character)msgParam.sender;
                 _state.NextState(eStateType.DAMAGED);
+                break;
+            case "Died":
+                RaiseExp(msgParam.expPoint);
                 break;
         }
     }
+
+
+    //Character's Info
+
+    protected int _hp = 100;
+    protected int _attackPoint = 10;
+
+    protected int _level = 1;
+    protected int _expPoint = 0;
+    protected int _nextLvExpStat = 0;
+    protected int _curExpStat = 0;
+
+    protected int _dropItemIndex = 0;
+
+    public int GetExpPoint() { return _expPoint; }
+
+    void RaiseExp(int expPoint)
+    {
+        _curExpStat += expPoint;
+
+        if(_nextLvExpStat <= _curExpStat)
+        {
+            LevelUp();
+        }
+    }
+
+    void LevelUp()
+    {
+        _level++;
+        _curExpStat = _curExpStat - _nextLvExpStat;
+        _nextLvExpStat = _level * 100;
+        _attackPoint = _level * 50;
+        Debug.Log("LEVEL UP!! current EXP is " + _curExpStat);
+        Debug.Log("nextLvExp is " + _nextLvExpStat);
+        Debug.Log("AttackPoint is " + _attackPoint);
+    }
+
+    public int GetItemIndex() { return _dropItemIndex; }
 
 
     //Attack
 
     float _attackCooltimeDuration = 0.0f;
     float _attackCooltime = 1.0f;
+    int _damagedPoint = 0;
+
+    Character _whoAttackedMe;
 
     public void Attack(MapObject enemy)
     {
@@ -186,6 +228,11 @@ public class Character : MapObject
         msgParam.attackPoint = _attackPoint;
 
         MessageSystem.Instance.Send(msgParam);
+    }
+
+    public Character WhoAttackedMe()
+    {
+        return _whoAttackedMe;
     }
 
     void UpdateAttackCoolTime()
@@ -211,8 +258,6 @@ public class Character : MapObject
     {
         _attackCooltimeDuration = 0.0f;
     }
-
-    int _damagedPoint = 0;
 
     public int GetDamagedPoint()
     {
