@@ -25,10 +25,10 @@ static class GlobalUtility
                 moveX++;
                 break;
             case eMoveDirection.UP:
-                moveY++;
+                moveY--;
                 break;
             case eMoveDirection.DOWN:
-                moveY--;
+                moveY++;
                 break;
         }
 
