@@ -19,8 +19,14 @@ public class DeadState : State
 
         MessageSystem.Instance.Send(msg);
 
+        int itemIndex = _character.GetItemIndex();
+        int tileX = _character.GetTileX();
+        int tileY = _character.GetTileY();
+
+        GameObject.Destroy(_character.gameObject);
+
         //Create Item
-        ItemSpawner.Instance.SpawnItem(_character.GetItemIndex(), _character.GetTileX(), _character.GetTileY());
+        ItemSpawner.Instance.SpawnItem(itemIndex, tileX, tileY);
     }
 
 }

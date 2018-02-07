@@ -26,7 +26,23 @@ public class ItemSpawner
 
     public void SpawnItem(int itemIndex, int tileX, int tileY)
     {
-        Item item = new Item();
-        item.Init(itemIndex, tileX, tileY);
+        Item item = CreateItem("itemName");
+
+        GameManager.Instance.GetMap().SetObject(tileX, tileY, item, eTileLayer.GROUND);
+    }
+
+    Item CreateItem(string itemName)
+    {
+        string filePath = "Prefabs/Item/ItemFrame";
+
+        GameObject itemPrefab = Resources.Load<GameObject>(filePath);
+        GameObject itemObject = GameObject.Instantiate(itemPrefab);
+
+        Sprite sprite = Resources.Load<Sprite>("Sprites/weapon/battle_axe1");
+        itemObject.GetComponent<SpriteRenderer>().sprite = sprite;
+
+        Item item = itemObject.AddComponent<Item>();
+
+        return item;
     }
 }
