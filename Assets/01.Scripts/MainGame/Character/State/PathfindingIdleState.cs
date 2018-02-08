@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class PathfindingIdleState : State
 {
@@ -49,6 +50,12 @@ public class PathfindingIdleState : State
                 //    _character.SetTargetTileCell(tileX, tileY);
                 _character.SetTargetTileCell(tileX, tileY);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            DataManager.Instance.SaveCharacter(_character);
+            SceneManager.LoadScene("Map01");
         }
 	}
 }

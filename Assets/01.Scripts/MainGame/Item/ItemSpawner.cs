@@ -18,28 +18,31 @@ public class ItemSpawner
         }
     }
 
+    Sprite[] _spriteArray;
 
     void Init()
     {
-
+        string filePath = "Sprites/weapon";
+        _spriteArray = Resources.LoadAll<Sprite>(filePath);
     }
 
     public void SpawnItem(int itemIndex, int tileX, int tileY)
     {
-        Item item = CreateItem("itemName");
-
+        Item item = CreateItem(itemIndex);
         GameManager.Instance.GetMap().SetObject(tileX, tileY, item, eTileLayer.GROUND);
     }
 
-    Item CreateItem(string itemName)
+    Item CreateItem(int itemIndex)
     {
         string filePath = "Prefabs/Item/ItemFrame";
 
         GameObject itemPrefab = Resources.Load<GameObject>(filePath);
         GameObject itemObject = GameObject.Instantiate(itemPrefab);
+        itemObject.transform.SetParent(GameManager.Instance.GetMap().transform);
+        itemObject.transform.localScale = Vector3.one;
+        itemObject.transform.localPosition = Vector3.zero;
 
-        Sprite sprite = Resources.Load<Sprite>("Sprites/weapon/battle_axe1");
-        itemObject.GetComponent<SpriteRenderer>().sprite = sprite;
+        itemObject.GetComponent<SpriteRenderer>().sprite = _spriteArray[itemIndex];
 
         Item item = itemObject.AddComponent<Item>();
 
