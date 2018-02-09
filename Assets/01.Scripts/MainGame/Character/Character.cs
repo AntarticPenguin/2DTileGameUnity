@@ -12,8 +12,18 @@ public enum eMoveDirection
     DOWN,
 }
 
-public class Character : MapObject
+public struct sCharacterInfo
 {
+    public int hp;
+    public int attackPoint;
+    public int level;
+    public int expPoint;
+    public int nextLvExpStat;
+    public int curExpStat;
+}
+
+public class Character : MapObject
+{ 
     protected GameObject _characterView;
 
     protected bool _isLive = true;
@@ -210,6 +220,26 @@ public class Character : MapObject
 
     public int GetItemIndex() { return _dropItemIndex; }
 
+    public sCharacterInfo GetCharacterInfo()
+    {
+        sCharacterInfo info = new sCharacterInfo();
+        info.hp = _hp;
+        info.attackPoint = _attackPoint;
+        info.level = _level;
+        info.nextLvExpStat = _nextLvExpStat;
+        info.curExpStat = _curExpStat;
+
+        return info;
+    }
+
+    public void SetCharacterInfo(sCharacterInfo info)
+    {
+        _hp = info.hp;
+        _attackPoint = info.attackPoint;
+        _level = info.level;
+        _nextLvExpStat = info.nextLvExpStat;
+        _curExpStat = info.curExpStat;
+    }
 
     //Attack
 

@@ -38,20 +38,25 @@ public class DataManager : MonoBehaviour
 		
 	}
 
-    Character _player;
+    sCharacterInfo _playerInfo = new sCharacterInfo();
 
     void Init()
     {
 
     }
 
-    public void SaveCharacter(Character character)
+    public void SaveCharacter(sCharacterInfo info)
     {
-        _player = character;
-    }
+        _playerInfo.hp = info.hp;
+        _playerInfo.attackPoint = info.attackPoint;
+        _playerInfo.level = info.level;
+        _playerInfo.expPoint = info.expPoint;
+        _playerInfo.nextLvExpStat = info.nextLvExpStat;
+        _playerInfo.curExpStat = info.curExpStat;
+}
 
-    public Character LoadPlayer()
+    public sCharacterInfo LoadData()
     {
-        return _player;
+        return _playerInfo;
     }
 }

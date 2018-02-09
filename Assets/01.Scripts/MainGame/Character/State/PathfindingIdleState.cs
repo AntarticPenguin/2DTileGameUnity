@@ -54,7 +54,7 @@ public class PathfindingIdleState : State
 
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            DataManager.Instance.SaveCharacter(_character);
+            DataManager.Instance.SaveCharacter(_character.GetCharacterInfo());
             SceneManager.LoadScene("Map01");
         }
 	}
