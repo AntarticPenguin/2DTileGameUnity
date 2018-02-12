@@ -44,7 +44,7 @@ public class Character : MapObject
         _state.Update();
 
         //UI
-        UpdateSlider();
+        UpdateUI();
     }
 
     //Init
@@ -327,6 +327,7 @@ public class Character : MapObject
 
     Slider _hpGuage;
     Slider _cooltimeGuage;
+    Text _levelText;
 
     public void LinkHPGuage(Slider hpGuage)
     {
@@ -350,10 +351,22 @@ public class Character : MapObject
         _cooltimeGuage.value = _attackCooltimeDuration;
     }
 
-    void UpdateSlider()
+    public void LinkLevelText(Text levelText)
+    {
+        GameObject canvasObject = transform.Find("Canvas").gameObject;
+        levelText.transform.SetParent(canvasObject.transform);
+        levelText.transform.localPosition = Vector3.zero;
+        levelText.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+
+        _levelText = levelText;
+        _levelText.text = "LEVEL " + _level;
+    }
+
+    void UpdateUI()
     {
         _hpGuage.value = _hp / 100.0f;
         _cooltimeGuage.value = _attackCooltimeDuration;
+        _levelText.text = "LEVEL " + _level;
     }
 
 

@@ -61,6 +61,9 @@ public class MainGameScene : MonoBehaviour
         Slider cooltimeGuage = GameUI.CreateCooltimeSlider();
         character.LinkCooltimeGuage(cooltimeGuage);
 
+        Text levelText = GameUI.CreateLevelText();
+        character.LinkLevelText(levelText);
+
         return character;
     }
 }

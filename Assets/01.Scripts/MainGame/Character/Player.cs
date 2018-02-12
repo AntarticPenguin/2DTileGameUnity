@@ -5,8 +5,22 @@ using UnityEngine;
 public class Player : Character
 {
     //Unity Functions
-	
-	void Start ()
+
+    void Awake()
+    {
+        //character's info init
+        _hp = 100;
+        _level = 1;
+        _attackPoint = _level * 50;
+
+        _expPoint = 0;
+        _nextLvExpStat = _level * 100;
+        _curExpStat = 0;
+
+        Debug.Log("CALL PLAYER Awake()");
+    }
+
+    void Start ()
     {
         base.InitState();
 
@@ -32,15 +46,5 @@ public class Player : Character
         }
 
         _state = _stateMap[eStateType.IDLE];
-
-
-        //character's info init
-        _hp = 100;
-        _level = 1;
-        _attackPoint = _level * 50;
-
-        _expPoint = 0;
-        _nextLvExpStat = _level * 100;
-        _curExpStat = 0;
     }
 }

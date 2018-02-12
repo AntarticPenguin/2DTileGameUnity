@@ -22,6 +22,7 @@ public class MainGameUI : MonoBehaviour {
 
     public GameObject HPGuagePrefabs;
     public GameObject CooltimeGuagePrefabs;
+    public GameObject LevelTextPrefabs;
 
     public Slider CreateHPSlider()
     {
@@ -38,5 +39,12 @@ public class MainGameUI : MonoBehaviour {
         GameObject sliderObject = GameObject.Instantiate(SliderPrefabs);
         Slider slider = sliderObject.GetComponent<Slider>();
         return slider;
+    }
+
+    public Text CreateLevelText()
+    {
+        GameObject textObject = GameObject.Instantiate(LevelTextPrefabs);
+        Text text = textObject.GetComponent<Text>();
+        return text;
     }
 }

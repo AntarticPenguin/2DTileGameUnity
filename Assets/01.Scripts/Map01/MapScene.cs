@@ -29,15 +29,9 @@ public class MapScene : MonoBehaviour
         GameManager.Instance.SetMap(_tileMap);
 
         sCharacterInfo info = DataManager.Instance.LoadData();
-        Debug.Log("hp: " + info.hp);
-        Debug.Log("atk: " + info.attackPoint);
-        Debug.Log("level: " + info.level);
-        Debug.Log("expPoint: " + info.expPoint);
-        Debug.Log("nextLvExpStat: " + info.nextLvExpStat);
-        Debug.Log("curExpStat: " + info.curExpStat);
-
         Character player = CreateCharacter("Player", "character03");
         player.SetCharacterInfo(info);
+
         Character monster = CreateCharacter("Monster", "character02");
         player.BecomeViewer();
     }
@@ -69,6 +63,9 @@ public class MapScene : MonoBehaviour
 
         Slider cooltimeGuage = GameUI.CreateCooltimeSlider();
         character.LinkCooltimeGuage(cooltimeGuage);
+
+        Text levelText = GameUI.CreateLevelText();
+        character.LinkLevelText(levelText);
 
         return character;
     }

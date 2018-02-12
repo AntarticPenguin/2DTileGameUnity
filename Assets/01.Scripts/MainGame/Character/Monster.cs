@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Monster : Character
-{ 
+{
     //Unity Functions
+
+    private void Awake()
+    {
+        _type = eMapObjectType.MONSTER;
+        _expPoint = 101;
+        _dropItemIndex = 10;
+    }
 
     void Start()
     {
-        _type = eMapObjectType.MONSTER;
-
-        _expPoint = 101;
-
-        _dropItemIndex = 10;
+        
     }
 
     override public void InitState()
