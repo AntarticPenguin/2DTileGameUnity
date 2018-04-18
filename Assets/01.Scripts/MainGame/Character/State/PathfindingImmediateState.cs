@@ -19,7 +19,8 @@ public class PathfindingImmediateState : PathfindingState
         }
 
         //경로
-        _nextState = eStateType.BUILD_PATH;
+        //_nextState = eStateType.BUILD_PATH;
+        _nextState = eStateType.IDLE;
     }
 
     override public void Stop()

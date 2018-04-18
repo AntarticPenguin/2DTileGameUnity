@@ -98,6 +98,8 @@ public class PathfindingState : State
                              *      큐에 삽입
                              *      방향에 따라 찾은 타일은 거리값을 갱신
                              */
+                            if (distanceFromStart > 5)
+                                return;
                             
                             if(null == nextTileCell.GetPrevTileCell())
                             {
@@ -105,26 +107,27 @@ public class PathfindingState : State
                                 nextTileCell.SetPrevTileCell(command.tileCell);
 
                                 //검색범위를 그려준다.
-                                //nextTileCell.DrawColor();
+                                nextTileCell.DrawColor();
 
                                 sPathCommand newCommand;
                                 newCommand.tileCell = nextTileCell;
-                                newCommand.heuristic = CalAstarHeuristic(distanceFromStart, nextTileCell, _targetTileCell); ; ;
+                                //newCommand.heuristic = CalAstarHeuristic(distanceFromStart, nextTileCell, _targetTileCell);
+                                newCommand.heuristic = nextTileCell.GetDistanceFromStart();
                                 PushCommand(newCommand);
                             }
-                            else
-                            {
-                                if (distanceFromStart < nextTileCell.GetDistanceFromStart())
-                                {
-                                    nextTileCell.SetDistanceFromStart(distanceFromStart);
-                                    nextTileCell.SetPrevTileCell(command.tileCell);
+                            //else
+                            //{
+                            //    if (distanceFromStart < nextTileCell.GetDistanceFromStart())
+                            //    {
+                            //        nextTileCell.SetDistanceFromStart(distanceFromStart);
+                            //        nextTileCell.SetPrevTileCell(command.tileCell);
 
-                                    sPathCommand newCommand;
-                                    newCommand.tileCell = nextTileCell;
-                                    newCommand.heuristic = CalAstarHeuristic(distanceFromStart, nextTileCell, _targetTileCell); ; ;
-                                    PushCommand(newCommand);
-                                }
-                            }
+                            //        sPathCommand newCommand;
+                            //        newCommand.tileCell = nextTileCell;
+                            //        newCommand.heuristic = CalAstarHeuristic(distanceFromStart, nextTileCell, _targetTileCell); ; ;
+                            //        PushCommand(newCommand);
+                            //    }
+                            //}
                         }
                     }
                 }
