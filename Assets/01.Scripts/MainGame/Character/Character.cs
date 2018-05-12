@@ -88,7 +88,7 @@ public class Character : MapObject
     virtual public void InitState()
     {
         {
-            State state = new IdleState();
+            State state = new PathfindingIdleState();
             state.Init(this);
             _stateMap[eStateType.IDLE] = state;
         }

@@ -16,8 +16,6 @@ public class Player : Character
         _expPoint = 0;
         _nextLvExpStat = _level * 100;
         _curExpStat = 0;
-
-        Debug.Log("CALL PLAYER Awake()");
     }
 
     void Start ()
@@ -35,16 +33,10 @@ public class Player : Character
             _stateMap[eStateType.MOVE] = state;
         }
         {
-            State state = new PathfindingImmediateState();
+            State state = new PathfindingState();
             state.Init(this);
             _stateMap[eStateType.PATHFINDING] = state;
         }
-        {
-            State state = new PathImmediateBuildState();
-            state.Init(this);
-            _stateMap[eStateType.BUILD_PATH] = state;
-        }
-
         _state = _stateMap[eStateType.IDLE];
     }
 }

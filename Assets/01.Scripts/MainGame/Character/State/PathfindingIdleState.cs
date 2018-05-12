@@ -32,7 +32,6 @@ public class PathfindingIdleState : State
                     return;
                 }
 
-
                 string filePath = "Prefabs/Effect/DamageEffect";
 
                 Vector3 pos = new Vector3(hit.transform.position.x, hit.transform.position.y, 1);
@@ -46,8 +45,6 @@ public class PathfindingIdleState : State
                 int tileY = hitTile.GetTileY();
 
                 TileCell hitCell = GameManager.Instance.GetMap().GetTileCell(tileX, tileY);
-                //if (true == hitCell.IsPathfindable())
-                //    _character.SetTargetTileCell(tileX, tileY);
                 _character.SetTargetTileCell(tileX, tileY);
             }
         }
