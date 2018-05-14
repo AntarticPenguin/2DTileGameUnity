@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-public class PathfindingIdleState : State
+public class PlayerIdleState : State
 {
 	override public void Update()
     {

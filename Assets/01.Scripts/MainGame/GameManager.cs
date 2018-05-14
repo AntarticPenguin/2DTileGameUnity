@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum eMapType
+{
+    TOWN,
+    DUNGEON,
+}
+
 public class GameManager
 {
     //Singleton
@@ -28,10 +34,10 @@ public class GameManager
         
     }
 
-
-    //Map
+    #region MAP
 
     TileMap _tileMap;
+    eMapType _mapType = eMapType.TOWN;
 
     public TileMap GetMap()
     {
@@ -42,4 +48,16 @@ public class GameManager
     {
         _tileMap = map;
     }
+
+    public eMapType GetMapType()
+    {
+        return _mapType;
+    }
+
+    public void SetMapType(eMapType type)
+    {
+        _mapType = type;
+    }
+
+    #endregion
 }

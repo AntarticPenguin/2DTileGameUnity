@@ -62,7 +62,7 @@ public class MapObject : MonoBehaviour
 
     //Layer
 
-    protected eTileLayer _curLayer;
+    protected eTileLayer _curLayer;         //자신의 레이어를 기억
 
     public eTileLayer GetCurrentLayer()
     {

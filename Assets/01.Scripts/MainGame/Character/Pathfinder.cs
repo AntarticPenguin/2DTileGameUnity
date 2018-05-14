@@ -89,7 +89,7 @@ public class Pathfinder
                                 nextTileCell.SetPrevTileCell(command.tileCell);
 
                                 //검색범위를 그려준다.
-                                nextTileCell.DrawColor();
+                                //nextTileCell.DrawColor();
 
                                 sPathCommand newCommand;
                                 newCommand.tileCell = nextTileCell;

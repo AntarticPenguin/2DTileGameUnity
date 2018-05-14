@@ -21,11 +21,12 @@ public class MainGameScene : MonoBehaviour
         MessageSystem.Instance.ProcessMessage();
     }
 
-
+    
     void Init()
     {
         _tileMap.Init();
         GameManager.Instance.SetMap(_tileMap);
+        GameManager.Instance.SetMapType(eMapType.TOWN);
 
         Character player = CreateCharacter("Player", "character03");
         Character monster = CreateCharacter("Monster", "character02");

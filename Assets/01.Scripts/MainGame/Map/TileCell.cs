@@ -122,12 +122,6 @@ public class TileCell
         mapObjectList[0].transform.GetComponent<SpriteRenderer>().color = Color.blue;
     }
 
-    public void DrawColor2()
-    {
-        List<MapObject> mapObjectList = _mapObjectMap[(int)eTileLayer.GROUND];
-        mapObjectList[0].transform.GetComponent<SpriteRenderer>().color = Color.green;
-    }
-
     public bool IsPathfindable()
     {
         for (int layer = 0; layer < (int)eTileLayer.MAXCOUNT; layer++)

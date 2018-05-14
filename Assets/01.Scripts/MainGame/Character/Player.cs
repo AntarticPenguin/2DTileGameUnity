@@ -23,7 +23,7 @@ public class Player : Character
         base.InitState();
 
         {
-            State state = new PathfindingIdleState();
+            State state = new PlayerIdleState();
             state.Init(this);
             _stateMap[eStateType.IDLE] = state;
         }
