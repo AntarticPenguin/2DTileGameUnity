@@ -37,14 +37,7 @@ public class Character : MapObject
 	// Update is called once per frame
 	void Update ()
     {
-        if (eStateType.NONE != _state.GetNextState())
-            ChangeState(_state.GetNextState());
-
-        UpdateAttackCoolTime();
-        _state.Update();
-
-        //UI
-        UpdateUI();
+        UpdateCharacter();
     }
 
     //Init
@@ -77,6 +70,16 @@ public class Character : MapObject
         map.SetObject(_tileX, _tileY, this, eTileLayer.MIDDLE);
 
         InitState();
+    }
+
+    virtual public void UpdateCharacter()
+    {
+        if (eStateType.NONE != _state.GetNextState())
+            ChangeState(_state.GetNextState());
+
+        UpdateAttackCoolTime();
+        _state.Update();
+        UpdateUI();
     }
 
 
@@ -115,7 +118,7 @@ public class Character : MapObject
         _state = _stateMap[eStateType.IDLE];
     }
 
-    private void ChangeState(eStateType nextState)
+    public void ChangeState(eStateType nextState)
     {
         if(null != _state)
             _state.Stop();
@@ -187,6 +190,7 @@ public class Character : MapObject
 
     protected int _hp = 100;
     protected int _attackPoint = 10;
+    protected int _moveRange = 6;
 
     protected int _level = 1;
     protected int _expPoint = 0;
@@ -195,6 +199,7 @@ public class Character : MapObject
 
     protected int _dropItemIndex = 0;
 
+    public int GetMoveRange() { return _moveRange; }
     public int GetExpPoint() { return _expPoint; }
 
     void RaiseExp(int expPoint)
@@ -399,5 +404,12 @@ public class Character : MapObject
     public Stack<TileCell> GetPathTileCellStack()
     {
         return _pathTileCellStack;
+    }
+
+    public bool IsClickedCharacter(TileCell tileCell)
+    {
+        if (_tileX == tileCell.GetTileX() && _tileY == tileCell.GetTileY())
+            return true;
+        return false;
     }
 }

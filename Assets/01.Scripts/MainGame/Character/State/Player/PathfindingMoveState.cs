@@ -6,7 +6,7 @@ public class PathfindingMoveState : State {
 
     Stack<TileCell> _pathTileCellStack;
 
-    override public void Start ()
+    public override void Start ()
     {
         base.Start();
         _pathTileCellStack = _character.GetPathTileCellStack();
@@ -19,7 +19,6 @@ public class PathfindingMoveState : State {
     {
         base.Stop();
         _pathTileCellStack.Clear();
-        _character.ResetTargetTileCell();
     }
 
     public override void Update()
@@ -41,29 +40,13 @@ public class PathfindingMoveState : State {
             eMoveDirection direction = GlobalUtility.GetDirection(curPosition, nextPosition);
             _character.SetNextDirection(direction);
 
-            List<MapObject> collisionList = GameManager.Instance.GetMap().GetCollisionList(nextPosition.x, nextPosition.y);
-            if (0 != collisionList.Count)
+            if(GameManager.Instance.GetMap().CanMoveTile(nextPosition.x, nextPosition.y))
             {
-                for(int i = 0; i < collisionList.Count; i++)
-                {
-                    switch(collisionList[i].GetObjectType())
-                    {
-                        case eMapObjectType.MONSTER:
-                            if (true == _character.IsAttackCoolDown())
-                                _nextState = eStateType.ATTACK;
-                            else
-                                _nextState = eStateType.IDLE;
-                            break;
-
-                        default:
-                            _nextState = eStateType.IDLE;
-                            break;
-                    }
-                }
+                _character.MoveStart(nextPosition.x, nextPosition.y);
             }
             else
             {
-                _character.MoveStart(nextPosition.x, nextPosition.y);
+                _nextState = eStateType.IDLE;
             }
         }
         else

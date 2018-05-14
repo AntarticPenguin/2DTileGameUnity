@@ -83,18 +83,24 @@ public class Pathfinder
                             float heuristic = CalcHeuristic(method, distanceFromStart,
                                 command.tileCell, nextTileCell, _targetTileCell);
 
+                            if (eMapType.DUNGEON == GameManager.Instance.GetMapType()
+                                && _character.GetMoveRange() < distanceFromStart)
+                                return;
+
                             if(null == nextTileCell.GetPrevTileCell())
                             {
+                                Debug.Log("dddd");
                                 nextTileCell.SetDistanceFromStart(distanceFromStart);
                                 nextTileCell.SetPrevTileCell(command.tileCell);
-
-                                //검색범위를 그려준다.
-                                //nextTileCell.DrawColor();
 
                                 sPathCommand newCommand;
                                 newCommand.tileCell = nextTileCell;
                                 newCommand.heuristic = CalcHeuristic(method, distanceFromStart, command.tileCell, nextTileCell, _targetTileCell);
                                 PushCommand(newCommand);
+
+                                //검색범위를 그려준다.
+                                if (eMapType.DUNGEON == GameManager.Instance.GetMapType())
+                                    nextTileCell.DrawColor();
                             }
                         }
                     }

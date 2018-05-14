@@ -30,7 +30,7 @@ public class State
 
     virtual public void Stop()
     {
-        
+
     }
 
     virtual public void Update()

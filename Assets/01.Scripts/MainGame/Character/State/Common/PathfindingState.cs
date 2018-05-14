@@ -13,7 +13,12 @@ public class PathfindingState : State
         _pathfinder.Init(_character);
 
         //경로 탐색
-        _pathfinder.FindPath(eFindMethod.ASTAR);
+        if (eMapType.TOWN == GameManager.Instance.GetMapType())
+            _pathfinder.FindPath(eFindMethod.ASTAR);
+        else
+        {
+            _pathfinder.FindPath(eFindMethod.DISTANCE);
+        }
 
         //경로 도출
         _pathfinder.BuildPath();

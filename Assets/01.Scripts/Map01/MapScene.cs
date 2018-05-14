@@ -27,6 +27,7 @@ public class MapScene : MonoBehaviour
     {
         _tileMap.Init();
         GameManager.Instance.SetMap(_tileMap);
+        GameManager.Instance.SetMapType(eMapType.DUNGEON);
 
         sCharacterInfo info = DataManager.Instance.LoadData();
         Character player = CreateCharacter("Player", "character03");
