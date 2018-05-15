@@ -53,15 +53,11 @@ public class Player : Character
 
         if (Input.GetMouseButtonDown(0))
         {
-			//RaycastHit hit;
-			//Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 			Vector2 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Ray2D ray = new Ray2D(worldPosition, Vector2.zero);
 			RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-			Debug.Log(worldPosition);
-            //if (Physics.Raycast(ray, out hit))
-			if(null != hit.collider)
+            if (null != hit.collider)
             {
                 if (EventSystem.current.IsPointerOverGameObject())
                 {

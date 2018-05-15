@@ -360,8 +360,8 @@ public class Character : MapObject
     {
         GameObject canvasObject = transform.Find("Canvas").gameObject;
         levelText.transform.SetParent(canvasObject.transform);
-        levelText.transform.localPosition = Vector3.zero;
-        levelText.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        levelText.transform.localPosition = new Vector3(0.0f, 1.30f, 0.0f);
+        levelText.transform.localScale = new Vector3(0.35f, 0.1f, 1.0f);
 
         _levelText = levelText;
         _levelText.text = "LEVEL " + _level;
