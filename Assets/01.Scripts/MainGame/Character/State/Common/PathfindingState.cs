@@ -14,15 +14,17 @@ public class PathfindingState : State
 
         //경로 탐색
         if (eMapType.TOWN == GameManager.Instance.GetMapType())
+        {
             _pathfinder.FindPath(eFindMethod.ASTAR);
+
+            //경로 도출
+            _pathfinder.BuildPath();
+            _nextState = eStateType.MOVE;
+        }
         else
         {
             _pathfinder.FindPath(eFindMethod.DISTANCE);
         }
-
-        //경로 도출
-        _pathfinder.BuildPath();
-        _nextState = eStateType.MOVE;
     }
 
     override public void Stop()

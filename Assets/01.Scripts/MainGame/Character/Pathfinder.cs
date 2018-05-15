@@ -28,16 +28,12 @@ public class Pathfinder
         _character = character;
         _targetTileCell = _character.GetTargetTileCell();
 
-        //시작타일셀을 큐에 넣는다.
-        if (null != _targetTileCell)
-        {
-            //시작지점을 sPathCommand로 만들어서 큐에 삽입.
-            TileCell startCell = GameManager.Instance.GetMap().GetTileCell(character.GetTileX(), character.GetTileY());
-            sPathCommand command;
-            command.tileCell = startCell;
-            command.heuristic = 0.0f;
-            PushCommand(command);
-        }
+        //시작지점을 sPathCommand로 만들어서 큐에 삽입.
+        TileCell startCell = GameManager.Instance.GetMap().GetTileCell(character.GetTileX(), character.GetTileY());
+        sPathCommand command;
+        command.tileCell = startCell;
+        command.heuristic = 0.0f;
+        PushCommand(command);
     }
 
     public void Reset()
@@ -58,50 +54,48 @@ public class Pathfinder
                 command.tileCell.Visit();
 
                 //FIND TARGET
-                if ((_targetTileCell.GetTileX() == command.tileCell.GetTileX())
+                if (eMapType.TOWN == GameManager.Instance.GetMapType() &&
+                    (_targetTileCell.GetTileX() == command.tileCell.GetTileX())
                     && (_targetTileCell.GetTileY() == command.tileCell.GetTileY()))
                 {
                     _reverseTileCell = _targetTileCell;
                     return;
                 }
-                else
+
+                for (eMoveDirection direction = 0; direction <= eMoveDirection.DOWN; direction++)
                 {
-                    for (eMoveDirection direction = 0; direction <= eMoveDirection.DOWN; direction++)
+                    sPosition curPosition;
+                    curPosition.x = command.tileCell.GetTileX();
+                    curPosition.y = command.tileCell.GetTileY();
+                    sPosition nextPosition = GlobalUtility.GetPositionByDirection(curPosition, direction);
+
+                    TileMap map = GameManager.Instance.GetMap();
+                    TileCell nextTileCell = map.GetTileCell(nextPosition.x, nextPosition.y);
+
+                    if(CheckPrecondition(nextTileCell, _targetTileCell))
                     {
-                        sPosition curPosition;
-                        curPosition.x = command.tileCell.GetTileX();
-                        curPosition.y = command.tileCell.GetTileY();
-                        sPosition nextPosition = GlobalUtility.GetPositionByDirection(curPosition, direction);
+                        float distanceFromStart = command.tileCell.GetDistanceFromStart()
+                            + command.tileCell.GetDistanceWeight();
+                        float heuristic = CalcHeuristic(method, distanceFromStart,
+                            command.tileCell, nextTileCell, _targetTileCell);
 
-                        TileMap map = GameManager.Instance.GetMap();
-                        TileCell nextTileCell = map.GetTileCell(nextPosition.x, nextPosition.y);
+                        if (eMapType.DUNGEON == GameManager.Instance.GetMapType()
+                            && _character.GetMoveRange() < distanceFromStart)
+                            return;
 
-                        if(CheckPrecondition(nextTileCell, _targetTileCell))
+                        if(null == nextTileCell.GetPrevTileCell())
                         {
-                            float distanceFromStart = command.tileCell.GetDistanceFromStart()
-                                + command.tileCell.GetDistanceWeight();
-                            float heuristic = CalcHeuristic(method, distanceFromStart,
-                                command.tileCell, nextTileCell, _targetTileCell);
+                            nextTileCell.SetDistanceFromStart(distanceFromStart);
+                            nextTileCell.SetPrevTileCell(command.tileCell);
 
-                            if (eMapType.DUNGEON == GameManager.Instance.GetMapType()
-                                && _character.GetMoveRange() < distanceFromStart)
-                                return;
+                            sPathCommand newCommand;
+                            newCommand.tileCell = nextTileCell;
+                            newCommand.heuristic = CalcHeuristic(method, distanceFromStart, command.tileCell, nextTileCell, _targetTileCell);
+                            PushCommand(newCommand);
 
-                            if(null == nextTileCell.GetPrevTileCell())
-                            {
-                                Debug.Log("dddd");
-                                nextTileCell.SetDistanceFromStart(distanceFromStart);
-                                nextTileCell.SetPrevTileCell(command.tileCell);
-
-                                sPathCommand newCommand;
-                                newCommand.tileCell = nextTileCell;
-                                newCommand.heuristic = CalcHeuristic(method, distanceFromStart, command.tileCell, nextTileCell, _targetTileCell);
-                                PushCommand(newCommand);
-
-                                //검색범위를 그려준다.
-                                if (eMapType.DUNGEON == GameManager.Instance.GetMapType())
-                                    nextTileCell.DrawColor();
-                            }
+                            //검색범위를 그려준다.
+                            if (eMapType.DUNGEON == GameManager.Instance.GetMapType())
+                                nextTileCell.DrawColor();
                         }
                     }
                 }
@@ -119,10 +113,27 @@ public class Pathfinder
 
     bool CheckPrecondition(TileCell nextTileCell, TileCell targetTileCell)
     {
-        if ((null != nextTileCell) && (true == nextTileCell.IsPathfindable() && false == nextTileCell.IsVisit() ||
-            (nextTileCell.GetTileX() == _targetTileCell.GetTileX() && nextTileCell.GetTileY() == _targetTileCell.GetTileY())))
-            return true;
-        return false;
+		//if ((null != nextTileCell) && (true == nextTileCell.IsPathfindable() && false == nextTileCell.IsVisit() ||
+		//    (nextTileCell.GetTileX() == _targetTileCell.GetTileX() && nextTileCell.GetTileY() == _targetTileCell.GetTileY())))
+		//    return true;
+
+		bool condition = false;
+
+        if (false == nextTileCell.IsVisit())
+            condition = true;
+
+        if (condition)
+            condition = nextTileCell.CanMove();
+
+        if (eMapType.DUNGEON == GameManager.Instance.GetMapType())
+            return condition;
+		else if(eMapType.TOWN == GameManager.Instance.GetMapType())
+		{
+			//해당 타일이 목표 타일
+			if (nextTileCell.GetTileX() == targetTileCell.GetTileX() && nextTileCell.GetTileY() == targetTileCell.GetTileY())
+				condition = true;
+		}
+        return condition;
     }
 
     int CompareHeuristic(sPathCommand command1, sPathCommand command2)

@@ -51,16 +51,17 @@ public class Player : Character
     {
         base.UpdateCharacter();
 
-        Camera camera;
-        GameObject cameraObject = transform.Find("Main Camera").gameObject;
-        camera = cameraObject.GetComponent<Camera>();
-
         if (Input.GetMouseButtonDown(0))
         {
-            RaycastHit hit;
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+			//RaycastHit hit;
+			//Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+			Vector2 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+			Ray2D ray = new Ray2D(worldPosition, Vector2.zero);
+			RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-            if (Physics.Raycast(ray, out hit))
+			Debug.Log(worldPosition);
+            //if (Physics.Raycast(ray, out hit))
+			if(null != hit.collider)
             {
                 if (EventSystem.current.IsPointerOverGameObject())
                 {
@@ -93,6 +94,7 @@ public class Player : Character
                 {
                     if(IsClickedCharacter(hitCell))
                     {
+                        //SetTargetTileCell(tileX, tileY);
                         ChangeState(eStateType.PATHFINDING);
                     }
                 }

@@ -122,22 +122,22 @@ public class TileCell
         mapObjectList[0].transform.GetComponent<SpriteRenderer>().color = Color.blue;
     }
 
-    public bool IsPathfindable()
-    {
-        for (int layer = 0; layer < (int)eTileLayer.MAXCOUNT; layer++)
-        {
-            List<MapObject> mapObjectList = _mapObjectMap[layer];
-            for (int i = 0; i < mapObjectList.Count; i++)
-            {
-                //if (eMapObjectType.MONSTER != mapObjectList[i].GetObjectType()
-                //    && false == mapObjectList[i].CanMove())
-                //{
-                //    return false;
-                //}
-                if (false == mapObjectList[i].CanMove())
-                    return false;
-            }
-        }
-        return true;
-    }
+	public bool IsPathfindable()
+	{
+		for (int layer = 0; layer < (int)eTileLayer.MAXCOUNT; layer++)
+		{
+			List<MapObject> mapObjectList = _mapObjectMap[layer];
+			for (int i = 0; i < mapObjectList.Count; i++)
+			{
+				//if (eMapObjectType.MONSTER != mapObjectList[i].GetObjectType()
+				//    && false == mapObjectList[i].CanMove())
+				//{
+				//    return false;
+				//}
+				if (false == mapObjectList[i].CanMove())
+					return false;
+			}
+		}
+		return true;
+	}
 }
