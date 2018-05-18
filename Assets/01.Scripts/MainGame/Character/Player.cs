@@ -39,6 +39,12 @@ public class Player : Character
             state.Init(this);
             _stateMap[eStateType.PATHFINDING] = state;
         }
+        {
+            State state = new SelectTargetState();
+            state.Init(this);
+            _stateMap[eStateType.SELECT_TARGET] = state;
+        }
+
         _state = _stateMap[eStateType.IDLE];
     }
 
@@ -65,14 +71,6 @@ public class Player : Character
                     return;
                 }
 
-                string filePath = "Prefabs/Effect/DamageEffect";
-
-                Vector3 pos = new Vector3(hit.transform.position.x, hit.transform.position.y, 1);
-
-                GameObject effectPrefab = Resources.Load<GameObject>(filePath);
-                GameObject effectObject = GameObject.Instantiate(effectPrefab, pos, Quaternion.identity);
-                GameObject.Destroy(effectObject, 1.0f);
-
                 TileObject hitTile = hit.transform.GetComponent<TileObject>();
                 int tileX = hitTile.GetTileX();
                 int tileY = hitTile.GetTileY();
@@ -91,7 +89,7 @@ public class Player : Character
                     if(IsClickedCharacter(hitCell))
                     {
                         //SetTargetTileCell(tileX, tileY);
-                        ChangeState(eStateType.PATHFINDING);
+                        ChangeState(eStateType.SELECT_TARGET);
                     }
                 }
             }

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MapScene : MonoBehaviour
+public class DungeonScene : MonoBehaviour
 {
-
-    public MainGameUI GameUI;
     public TileMap _tileMap;
 
 
@@ -59,14 +57,22 @@ public class MapScene : MonoBehaviour
         }
         character.Init(resourceName);
 
-        Slider hpGuage = GameUI.CreateHPSlider();
+        Slider hpGuage = UIManager.Instance.CreateHPSlider();
         character.LinkHPGuage(hpGuage);
 
-        Slider cooltimeGuage = GameUI.CreateCooltimeSlider();
+        Slider cooltimeGuage = UIManager.Instance.CreateCooltimeSlider();
         character.LinkCooltimeGuage(cooltimeGuage);
 
-        Text levelText = GameUI.CreateLevelText();
+        Text levelText = UIManager.Instance.CreateLevelText();
         character.LinkLevelText(levelText);
+
+        //test
+        if("Player" == fileName)
+        {
+            Canvas battleMenu = UIManager.Instance.CreateBattleMenu();
+            character.LinkBattleMenu(battleMenu);
+            character.CloseBatleMenu();
+        }
 
         return character;
     }

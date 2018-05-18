@@ -49,7 +49,7 @@ public class Character : MapObject
         string filePath = "Prefabs/CharacterView/" + viewName;
         GameObject characterViewPrefabs = Resources.Load<GameObject>(filePath);
 
-        _characterView = GameObject.Instantiate(characterViewPrefabs);
+        _characterView = Object.Instantiate(characterViewPrefabs);
         _characterView.transform.SetParent(transform);
         _characterView.transform.localPosition = Vector3.zero;
         _characterView.transform.localScale = Vector3.one;
@@ -333,6 +333,7 @@ public class Character : MapObject
     Slider _hpGuage;
     Slider _cooltimeGuage;
     Text _levelText;
+    Canvas _battleMenu;
 
     public void LinkHPGuage(Slider hpGuage)
     {
@@ -365,6 +366,25 @@ public class Character : MapObject
 
         _levelText = levelText;
         _levelText.text = "LEVEL " + _level;
+    }
+
+    public void LinkBattleMenu(Canvas battleMenu)
+    {
+        battleMenu.transform.SetParent(transform);
+        battleMenu.transform.localPosition = Vector3.zero;
+        battleMenu.transform.localScale = Vector3.one;
+
+        _battleMenu = battleMenu;
+    }
+
+    public void OpenBattleMenu()
+    {
+        _battleMenu.gameObject.SetActive(true);
+    }
+
+    public void CloseBatleMenu()
+    {
+        _battleMenu.gameObject.SetActive(false);
     }
 
     void UpdateUI()

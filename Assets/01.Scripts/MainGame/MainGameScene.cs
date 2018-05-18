@@ -5,9 +5,7 @@ using UnityEngine.UI;
 
 public class MainGameScene : MonoBehaviour
 {
-    public MainGameUI GameUI;
     public TileMap _tileMap;
-
 
     // Use this for initialization
     void Start()
@@ -55,13 +53,13 @@ public class MainGameScene : MonoBehaviour
         }
         character.Init(resourceName);
 
-        Slider hpGuage = GameUI.CreateHPSlider();
+        Slider hpGuage = UIManager.Instance.CreateHPSlider();
         character.LinkHPGuage(hpGuage);
 
-        Slider cooltimeGuage = GameUI.CreateCooltimeSlider();
+        Slider cooltimeGuage = UIManager.Instance.CreateCooltimeSlider();
         character.LinkCooltimeGuage(cooltimeGuage);
 
-        Text levelText = GameUI.CreateLevelText();
+        Text levelText = UIManager.Instance.CreateLevelText();
         character.LinkLevelText(levelText);
 
         return character;

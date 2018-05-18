@@ -10,6 +10,7 @@ public enum eStateType
     ATTACK,
     DAMAGED,
     PATHFINDING,
+    SELECT_TARGET,
     DEAD,
 }
 
