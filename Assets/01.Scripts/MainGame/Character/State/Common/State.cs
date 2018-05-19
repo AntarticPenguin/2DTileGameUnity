@@ -19,7 +19,7 @@ public class State
     protected eStateType _nextState = eStateType.NONE;
     protected Character _character;
 
-    public void Init(Character character)
+    virtual public void Init(Character character)
     {
         _character = character;
     }

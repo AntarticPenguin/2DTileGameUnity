@@ -90,8 +90,8 @@ public class Pathfinder
 
                             sPathCommand newCommand;
                             newCommand.tileCell = nextTileCell;
-                            newCommand.heuristic = CalcHeuristic(method, distanceFromStart, command.tileCell, nextTileCell, _targetTileCell);
-                            PushCommand(newCommand);
+							newCommand.heuristic = heuristic;
+							PushCommand(newCommand);
 
                             //검색범위를 그려준다.
                             if (eMapType.DUNGEON == GameManager.Instance.GetMapType())

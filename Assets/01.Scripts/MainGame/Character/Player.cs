@@ -86,11 +86,12 @@ public class Player : Character
                 }
                 else if(eMapType.DUNGEON == GameManager.Instance.GetMapType())
                 {
-                    if(IsClickedCharacter(hitCell))
+                    if (false == IsMenuOn() && IsClickedCharacter(hitCell))
                     {
-                        //SetTargetTileCell(tileX, tileY);
-                        ChangeState(eStateType.SELECT_TARGET);
+                        OpenBattleMenu();
                     }
+                    else
+                        SetTargetTileCell(tileX, tileY);
                 }
             }
         }

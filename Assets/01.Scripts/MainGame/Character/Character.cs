@@ -12,6 +12,16 @@ public enum eMoveDirection
     DOWN,
 }
 
+public enum eActionType
+{
+    NONE,
+    MOVE,
+    ITEM,
+    ATTACK,
+    MAGIC,
+    REST,
+}
+
 public struct sCharacterInfo
 {
     public int hp;
@@ -191,6 +201,7 @@ public class Character : MapObject
     protected int _hp = 100;
     protected int _attackPoint = 10;
     protected int _moveRange = 6;
+	protected int _attackRange = 3;
 
     protected int _level = 1;
     protected int _expPoint = 0;
@@ -200,6 +211,7 @@ public class Character : MapObject
     protected int _dropItemIndex = 0;
 
     public int GetMoveRange() { return _moveRange; }
+	public int GetAttackRange() { return _attackRange; }
     public int GetExpPoint() { return _expPoint; }
 
     void RaiseExp(int expPoint)
@@ -377,15 +389,22 @@ public class Character : MapObject
         _battleMenu = battleMenu;
     }
 
+
+    //MenuUI
+    bool _menuOn = false;
     public void OpenBattleMenu()
     {
+        _menuOn = true;
         _battleMenu.gameObject.SetActive(true);
     }
 
     public void CloseBatleMenu()
     {
+        _menuOn = false;
         _battleMenu.gameObject.SetActive(false);
     }
+
+    public bool IsMenuOn() { return _menuOn; }
 
     void UpdateUI()
     {
@@ -432,4 +451,11 @@ public class Character : MapObject
             return true;
         return false;
     }
+
+
+    //Action By UI
+    eActionType _curAction;
+
+    public void SetActionType(eActionType type) { _curAction = type; }
+    public eActionType GetActionType() { return _curAction; }
 }

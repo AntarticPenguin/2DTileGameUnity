@@ -28,14 +28,11 @@ public class SoundPlayer : MonoBehaviour {
 
         
     //Unity Functions
-
-	// Use this for initialization
 	void Start ()
     {
 		
 	}
 	
-	// Update is called once per frame
 	void Update ()
     {
 		

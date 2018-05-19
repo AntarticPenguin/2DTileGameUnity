@@ -3,19 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager
+public class UISystem : MonoBehaviour
 {
+
     #region SINGLETON
 
-    static UIManager _instance;
-    public static UIManager Instance
+    static UISystem _instance;
+    public static UISystem Instance
     {
         get
         {
             if(null == _instance)
             {
-                _instance = new UIManager();
-                _instance.Init();
+                _instance = FindObjectOfType<UISystem>();
+                if (null == _instance)
+                {
+                    GameObject obj = new GameObject();
+                    obj.name = "UIManager";
+                    _instance = obj.AddComponent<UISystem>();
+                    DontDestroyOnLoad(obj);
+                }
             }
             return _instance;
         }
@@ -23,15 +30,8 @@ public class UIManager
 
     #endregion
 
-    #region LOAD UI
-
-    GameObject _hpGuagePrefabs;
-    GameObject _cooltimeGuagePrefabs;
-    GameObject _levelTextPrefabs;
-
-    GameObject _battleMenuPrefabs;
-
-    void Init()
+    //Unity Functions
+    void Awake()
     {
         string filePath = "Prefabs/UI/";
         _hpGuagePrefabs = Resources.Load<GameObject>(filePath + "hpGuage");
@@ -39,6 +39,23 @@ public class UIManager
         _levelTextPrefabs = Resources.Load<GameObject>(filePath + "LevelText");
         _battleMenuPrefabs = Resources.Load<GameObject>(filePath + "battleMenu");
     }
+
+    void Start()
+    {
+
+    }
+
+    void Update()
+    {
+
+    }
+
+    #region LOAD UI
+
+    GameObject _hpGuagePrefabs;
+    GameObject _cooltimeGuagePrefabs;
+    GameObject _levelTextPrefabs;
+    GameObject _battleMenuPrefabs;
 
     public Slider CreateHPSlider()
     {
@@ -52,21 +69,21 @@ public class UIManager
 
     public Slider CreateSlider(GameObject SliderPrefabs)
     {
-        GameObject sliderObject = Object.Instantiate(SliderPrefabs);
+        GameObject sliderObject = Instantiate(SliderPrefabs);
         Slider slider = sliderObject.GetComponent<Slider>();
         return slider;
     }
 
     public Text CreateLevelText()
     {
-        GameObject textObject = Object.Instantiate(_levelTextPrefabs);
+        GameObject textObject = Instantiate(_levelTextPrefabs);
         Text text = textObject.GetComponent<Text>();
         return text;
     }
 
     public Canvas CreateBattleMenu()
     {
-        GameObject canvasObject = Object.Instantiate(_battleMenuPrefabs);
+        GameObject canvasObject = Instantiate(_battleMenuPrefabs);
         Canvas canvas = canvasObject.GetComponent<Canvas>();
         return canvas;
     }

@@ -53,13 +53,13 @@ public class MainGameScene : MonoBehaviour
         }
         character.Init(resourceName);
 
-        Slider hpGuage = UIManager.Instance.CreateHPSlider();
+        Slider hpGuage = UISystem.Instance.CreateHPSlider();
         character.LinkHPGuage(hpGuage);
 
-        Slider cooltimeGuage = UIManager.Instance.CreateCooltimeSlider();
+        Slider cooltimeGuage = UISystem.Instance.CreateCooltimeSlider();
         character.LinkCooltimeGuage(cooltimeGuage);
 
-        Text levelText = UIManager.Instance.CreateLevelText();
+        Text levelText = UISystem.Instance.CreateLevelText();
         character.LinkLevelText(levelText);
 
         return character;
