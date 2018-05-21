@@ -5,12 +5,15 @@ using UnityEngine;
 public class PathfindingMoveState : State {
 
     Stack<TileCell> _pathTileCellStack;
+    float _movingDuration;
 
     public override void Start ()
     {
         base.Start();
+
+        _movingDuration = 0.0f;
+
         _pathTileCellStack = _character.GetPathTileCellStack();
-        
         if(0 < _pathTileCellStack.Count)
             _pathTileCellStack.Pop();       //처음위치 빼주기
     }
@@ -19,30 +22,40 @@ public class PathfindingMoveState : State {
     {
         base.Stop();
         _pathTileCellStack.Clear();
+
+        _character.DecreaseBehavior(2);
     }
 
     public override void Update()
     {
         base.Update();
 
-        if( 0 != _pathTileCellStack.Count)
+        if (_character.GetMoveSpeed() <= _movingDuration)
         {
-            TileCell tileCell = _pathTileCellStack.Pop();
-
-            sPosition curPosition;
-            curPosition.x = _character.GetTileX();
-            curPosition.y = _character.GetTileY();
-
-            sPosition nextPosition;
-            nextPosition.x = tileCell.GetTileX();
-            nextPosition.y = tileCell.GetTileY();
-
-            eMoveDirection direction = GlobalUtility.GetDirection(curPosition, nextPosition);
-            _character.SetNextDirection(direction);
-
-            if(GameManager.Instance.GetMap().CanMoveTile(nextPosition.x, nextPosition.y))
+            _movingDuration = 0.0f;
+            if (0 != _pathTileCellStack.Count)
             {
-                _character.MoveStart(nextPosition.x, nextPosition.y);
+                TileCell tileCell = _pathTileCellStack.Pop();
+
+                sPosition curPosition;
+                curPosition.x = _character.GetTileX();
+                curPosition.y = _character.GetTileY();
+
+                sPosition nextPosition;
+                nextPosition.x = tileCell.GetTileX();
+                nextPosition.y = tileCell.GetTileY();
+
+                eMoveDirection direction = GlobalUtility.GetDirection(curPosition, nextPosition);
+                _character.SetNextDirection(direction);
+
+                if (GameManager.Instance.GetMap().CanMoveTile(nextPosition.x, nextPosition.y))
+                {
+                    _character.MoveStart(nextPosition.x, nextPosition.y);
+                }
+                else
+                {
+                    _nextState = eStateType.IDLE;
+                }
             }
             else
             {
@@ -51,7 +64,7 @@ public class PathfindingMoveState : State {
         }
         else
         {
-            _nextState = eStateType.IDLE;
+            _movingDuration += Time.deltaTime;
         }
     }
 }

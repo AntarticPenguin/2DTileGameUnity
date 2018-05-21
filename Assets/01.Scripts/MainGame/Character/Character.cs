@@ -200,8 +200,11 @@ public class Character : MapObject
 
     protected int _hp = 100;
     protected int _attackPoint = 10;
+    protected float _moveSpeed = 0.05f;
     protected int _moveRange = 6;
 	protected int _attackRange = 3;
+    protected int _behaviorPoint = 10;
+    protected float _chargeTime = 1.0f;
 
     protected int _level = 1;
     protected int _expPoint = 0;
@@ -210,9 +213,29 @@ public class Character : MapObject
 
     protected int _dropItemIndex = 0;
 
+    public float GetMoveSpeed() { return _moveSpeed; }
     public int GetMoveRange() { return _moveRange; }
 	public int GetAttackRange() { return _attackRange; }
+    public int GetBehaviorPoint() { return _behaviorPoint; }
+    public float GetChargeTime() { return _chargeTime; }
     public int GetExpPoint() { return _expPoint; }
+
+    public void ChargeBehaivor()
+    {
+        _behaviorPoint++;
+
+        if (10 < _behaviorPoint)
+        {
+            _behaviorPoint = 10;
+        }
+    }
+
+    public void DecreaseBehavior(int point)
+    {
+        _behaviorPoint -= point;
+        if (_behaviorPoint < 0)
+            _behaviorPoint = 0;
+    }
 
     void RaiseExp(int expPoint)
     {
@@ -398,7 +421,7 @@ public class Character : MapObject
         _battleMenu.gameObject.SetActive(true);
     }
 
-    public void CloseBatleMenu()
+    public void CloseBattleMenu()
     {
         _menuOn = false;
         _battleMenu.gameObject.SetActive(false);

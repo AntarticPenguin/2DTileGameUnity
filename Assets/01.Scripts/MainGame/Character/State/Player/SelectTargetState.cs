@@ -9,21 +9,31 @@ public class SelectTargetState : State
     public override void Init(Character character)
     {
         base.Init(character);
-
-        _rangeViewer.Init(_character);
     }
 
     public override void Update()
     {
         base.Update();
+
+        SetNextStateByAction();
     }
 
     public override void Start()
     {
         base.Start();
+        _character.ResetTargetTileCell();
         
         int range = GetViewRange();
-        _rangeViewer.FindPath(eFindMethod.DISTANCE);
+
+        _rangeViewer.Init(_character);
+        _rangeViewer.FindPath(eFindMode.VIEW_RANGE, eFindMethod.DISTANCE);
+    }
+
+    public override void Stop()
+    {
+        base.Stop();
+
+        _rangeViewer.Reset();
     }
 
     int GetViewRange()
@@ -38,4 +48,30 @@ public class SelectTargetState : State
 				return 0;
 		}
 	}
+
+    void SetNextStateByAction()
+    {
+        switch(_character.GetActionType())
+        {
+            case eActionType.MOVE:
+                MoveAction();
+                break;
+            default:
+                break;
+        }
+    }
+
+    void MoveAction()
+    {
+        TileCell targetCell = _character.GetTargetTileCell();
+        if (null == targetCell)
+            return;
+
+        if (!(targetCell.GetTileX() == _character.GetTileX()
+            && targetCell.GetTileY() == _character.GetTileY()))
+        {
+            if (_rangeViewer.CheckRange(targetCell))
+                _nextState = eStateType.PATHFINDING;
+        }
+    }
 }

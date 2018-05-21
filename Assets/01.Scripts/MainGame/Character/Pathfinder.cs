@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum eFindMode
+{
+    VIEW_RANGE,
+    FIND_PATH,
+}
+
 public enum eFindMethod
 {
     DISTANCE,
@@ -40,9 +46,13 @@ public class Pathfinder
     {
         GameManager.Instance.GetMap().ResetPathfinding();
         _pathfindingQueue.Clear();
+
+        for (int i = 0; i < _rangeTile.Count; i++)
+            _rangeTile[i].ClearColor();
+        _rangeTile.Clear();
     }
 
-    public void FindPath(eFindMethod method)
+    public void FindPath(eFindMode mode, eFindMethod method)
     {
         while (0 != _pathfindingQueue.Count)
         {
@@ -54,13 +64,16 @@ public class Pathfinder
                 command.tileCell.Visit();
 
                 //FIND TARGET
-                if (eMapType.TOWN == GameManager.Instance.GetMapType() &&
-                    (_targetTileCell.GetTileX() == command.tileCell.GetTileX())
-                    && (_targetTileCell.GetTileY() == command.tileCell.GetTileY()))
+                if(eFindMode.FIND_PATH == mode)
                 {
-                    _reverseTileCell = _targetTileCell;
-                    return;
+                    if ((_targetTileCell.GetTileX() == command.tileCell.GetTileX())
+                        && (_targetTileCell.GetTileY() == command.tileCell.GetTileY()))
+                    {
+                        _reverseTileCell = _targetTileCell;
+                        return;
+                    }
                 }
+
 
                 for (eMoveDirection direction = 0; direction <= eMoveDirection.DOWN; direction++)
                 {
@@ -79,8 +92,7 @@ public class Pathfinder
                         float heuristic = CalcHeuristic(method, distanceFromStart,
                             command.tileCell, nextTileCell, _targetTileCell);
 
-                        if (eMapType.DUNGEON == GameManager.Instance.GetMapType()
-                            && _character.GetMoveRange() < distanceFromStart)
+                        if ((eFindMode.VIEW_RANGE == mode) && (_character.GetMoveRange() < distanceFromStart))
                             return;
 
                         if(null == nextTileCell.GetPrevTileCell())
@@ -95,7 +107,7 @@ public class Pathfinder
 
                             //검색범위를 그려준다.
                             if (eMapType.DUNGEON == GameManager.Instance.GetMapType())
-                                nextTileCell.DrawColor();
+                                DrawSearchTile(nextTileCell);
                         }
                     }
                 }
@@ -143,13 +155,30 @@ public class Pathfinder
 
    public void BuildPath()
     {
+        //경로를 도출
         while (null != _reverseTileCell)
         {
-            //경로를 그려준다
-            //_reverseTileCell.DrawColor2();
             _character.PushPathTileCell(_reverseTileCell);
             _reverseTileCell = _reverseTileCell.GetPrevTileCell();
         }
+    }
+
+    List<TileCell> _rangeTile = new List<TileCell>();
+
+    void DrawSearchTile(TileCell tileCell)
+    {
+        tileCell.DrawColor();
+        _rangeTile.Add(tileCell);
+    }
+
+    public bool CheckRange(TileCell tileCell)
+    {
+        for(int i = 0; i < _rangeTile.Count; i++)
+        {
+            if (_rangeTile[i] == tileCell)
+                return true;
+        }
+        return false;
     }
 
     #region CALCULATE HEURISTIC

@@ -19,7 +19,11 @@ public class UIAction : MonoBehaviour
 
     public void UIMove()
 	{
-		_actor.SetActionType(eActionType.MOVE);
-		_actor.ChangeState(eStateType.SELECT_TARGET);
+        if (10 == _actor.GetBehaviorPoint())
+        {
+            _actor.CloseBattleMenu();
+            _actor.SetActionType(eActionType.MOVE);
+            _actor.ChangeState(eStateType.SELECT_TARGET);
+        }
     }
 }

@@ -71,7 +71,7 @@ public class DungeonScene : MonoBehaviour
         {
             Canvas battleMenu = UISystem.Instance.CreateBattleMenu();
             character.LinkBattleMenu(battleMenu);
-            character.CloseBatleMenu();
+            character.CloseBattleMenu();
         }
 
         return character;
