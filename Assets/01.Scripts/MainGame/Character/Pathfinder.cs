@@ -28,8 +28,9 @@ public class Pathfinder
     Character _character;
     TileCell _targetTileCell = null;
     TileCell _reverseTileCell = null;
+	int _range = 0;
 
-    public void Init(Character character)
+	public void Init(Character character)
     {
         _character = character;
         _targetTileCell = _character.GetTargetTileCell();
@@ -52,7 +53,12 @@ public class Pathfinder
         _rangeTile.Clear();
     }
 
-    public void FindPath(eFindMode mode, eFindMethod method)
+	public void SetRange(int range)
+	{
+		_range = range;
+	}
+
+	public void FindPath(eFindMode mode, eFindMethod method)
     {
         while (0 != _pathfindingQueue.Count)
         {
@@ -92,7 +98,7 @@ public class Pathfinder
                         float heuristic = CalcHeuristic(method, distanceFromStart,
                             command.tileCell, nextTileCell, _targetTileCell);
 
-                        if ((eFindMode.VIEW_RANGE == mode) && (_character.GetMoveRange() < distanceFromStart))
+                        if ((eFindMode.VIEW_RANGE == mode) && (_range < distanceFromStart))
                             return;
 
                         if(null == nextTileCell.GetPrevTileCell())

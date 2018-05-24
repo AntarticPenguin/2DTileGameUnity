@@ -19,7 +19,14 @@ public class PlayerIdleState : State
     {
         base.Update();
 
-        if (_character.GetChargeTime() <= _chargeDuration)
+		if (_character.IsMenuOn())
+		{
+			if (Input.GetMouseButtonDown(1))
+				_character.CloseBattleMenu();
+		}
+
+
+		if (_character.GetChargeTime() <= _chargeDuration)
         {
             _chargeDuration = 0.0f;
             _character.ChargeBehaivor();

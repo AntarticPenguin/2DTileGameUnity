@@ -28,8 +28,14 @@ public class AttackState : State
             }
         }
 
-        _character.ResetAttackCoolTime();
         _character.SetNextDirection(eMoveDirection.NONE);
         _nextState = eStateType.IDLE;
     }
+
+	public override void Stop()
+	{
+		base.Stop();
+		_character.SetCanBattle(false);
+		_character.DecreaseBehavior(2);
+	}
 }

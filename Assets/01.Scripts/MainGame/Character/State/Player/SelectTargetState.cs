@@ -14,6 +14,7 @@ public class SelectTargetState : State
     public override void Update()
     {
         base.Update();
+		_character.ChargeBehaivor();
 
         SetNextStateByAction();
     }
@@ -26,6 +27,7 @@ public class SelectTargetState : State
         int range = GetViewRange();
 
         _rangeViewer.Init(_character);
+		_rangeViewer.SetRange(range);
         _rangeViewer.FindPath(eFindMode.VIEW_RANGE, eFindMethod.DISTANCE);
     }
 
@@ -38,6 +40,8 @@ public class SelectTargetState : State
 
     int GetViewRange()
     {
+		Debug.Log(_character.GetActionType().ToString());
+
 		switch (_character.GetActionType())
 		{
 			case eActionType.MOVE:

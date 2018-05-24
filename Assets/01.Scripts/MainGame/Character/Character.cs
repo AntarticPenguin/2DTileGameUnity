@@ -59,7 +59,7 @@ public class Character : MapObject
         string filePath = "Prefabs/CharacterView/" + viewName;
         GameObject characterViewPrefabs = Resources.Load<GameObject>(filePath);
 
-        _characterView = Object.Instantiate(characterViewPrefabs);
+        _characterView = Instantiate(characterViewPrefabs);
         _characterView.transform.SetParent(transform);
         _characterView.transform.localPosition = Vector3.zero;
         _characterView.transform.localScale = Vector3.one;
@@ -87,7 +87,6 @@ public class Character : MapObject
         if (eStateType.NONE != _state.GetNextState())
             ChangeState(_state.GetNextState());
 
-        UpdateAttackCoolTime();
         _state.Update();
         UpdateUI();
     }
@@ -106,7 +105,7 @@ public class Character : MapObject
             _stateMap[eStateType.IDLE] = state;
         }
         {
-            State state = new MoveState();
+            State state = new PathfindingMoveState();
             state.Init(this);
             _stateMap[eStateType.MOVE] = state;
         }
@@ -200,9 +199,9 @@ public class Character : MapObject
 
     protected int _hp = 100;
     protected int _attackPoint = 10;
-    protected float _moveSpeed = 0.05f;
-    protected int _moveRange = 6;
-	protected int _attackRange = 3;
+    protected float _moveSpeed = 0.02f;
+    protected int _moveRange = 10;
+	protected int _attackRange = 2;
     protected int _behaviorPoint = 10;
     protected float _chargeTime = 1.0f;
 
@@ -227,6 +226,7 @@ public class Character : MapObject
         if (10 < _behaviorPoint)
         {
             _behaviorPoint = 10;
+			_canBattle = true;
         }
     }
 
@@ -283,9 +283,8 @@ public class Character : MapObject
 
     //Attack
 
-    float _attackCooltimeDuration = 0.0f;
-    float _attackCooltime = 1.0f;
     int _damagedPoint = 0;
+	bool _canBattle = true;
 
     Character _whoAttackedMe;
 
@@ -305,31 +304,17 @@ public class Character : MapObject
         return _whoAttackedMe;
     }
 
-    void UpdateAttackCoolTime()
-    {
-        if (_attackCooltimeDuration < _attackCooltime)
-        {
-            _attackCooltimeDuration += Time.deltaTime;
-        }
-        else
-        {
-            _attackCooltimeDuration = _attackCooltime;
-        }
-    }
+	public void SetCanBattle(bool canBattle)
+	{
+		_canBattle = canBattle;
+	}
 
-    public bool IsAttackCoolDown()
-    {
-        if (_attackCooltime <= _attackCooltimeDuration)
-            return true;
-        return false;
-    }
+	public bool canBattle()
+	{
+		return _canBattle;
+	}
 
-    public void ResetAttackCoolTime()
-    {
-        _attackCooltimeDuration = 0.0f;
-    }
-
-    public int GetDamagedPoint()
+	public int GetDamagedPoint()
     {
         return _damagedPoint;
     }
@@ -389,7 +374,7 @@ public class Character : MapObject
         cooltimeGuage.transform.localScale = Vector3.one;
 
         _cooltimeGuage = cooltimeGuage;
-        _cooltimeGuage.value = _attackCooltimeDuration;
+		_cooltimeGuage.value = 0.0f;
     }
 
     public void LinkLevelText(Text levelText)
@@ -432,7 +417,7 @@ public class Character : MapObject
     void UpdateUI()
     {
         _hpGuage.value = _hp / 100.0f;
-        _cooltimeGuage.value = _attackCooltimeDuration;
+		_cooltimeGuage.value = 0.0f;
         _levelText.text = "LEVEL " + _level;
     }
 
