@@ -102,4 +102,9 @@ public class Player : Character
             SceneManager.LoadScene("Map01");
         }
     }
+
+	public eFindMode GetFindMode()
+	{
+		return eFindMode.FIND_PATH;
+	}
 }

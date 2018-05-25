@@ -19,12 +19,8 @@ public class PlayerIdleState : State
     {
         base.Update();
 
-		if (_character.IsMenuOn())
-		{
-			if (Input.GetMouseButtonDown(1))
-				_character.CloseBattleMenu();
-		}
-
+		if (Input.GetMouseButtonDown(1))
+			CloseUI();
 
 		if (_character.GetChargeTime() <= _chargeDuration)
         {
@@ -33,5 +29,11 @@ public class PlayerIdleState : State
         }
         else
             _chargeDuration += Time.deltaTime;
+	}
+	
+	void CloseUI()
+	{
+		if (_character.IsMenuOn())
+			_character.CloseBattleMenu();
 	}
 }

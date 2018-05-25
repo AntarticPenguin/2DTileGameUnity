@@ -4,7 +4,9 @@ using UnityEngine;
 
 public enum eFindMode
 {
-    VIEW_RANGE,
+	NONE,
+    VIEW_MOVERANGE,
+	VIEW_ATTACKRANGE,
     FIND_PATH,
 }
 
@@ -60,6 +62,8 @@ public class Pathfinder
 
 	public void FindPath(eFindMode mode, eFindMethod method)
     {
+		bool isViewRange = (eFindMode.VIEW_MOVERANGE == mode || eFindMode.VIEW_ATTACKRANGE == mode);
+
         while (0 != _pathfindingQueue.Count)
         {
             sPathCommand command = _pathfindingQueue[0];
@@ -91,14 +95,14 @@ public class Pathfinder
                     TileMap map = GameManager.Instance.GetMap();
                     TileCell nextTileCell = map.GetTileCell(nextPosition.x, nextPosition.y);
 
-                    if(CheckPrecondition(nextTileCell, _targetTileCell))
+                    if(CheckPrecondition(mode, nextTileCell, _targetTileCell))
                     {
                         float distanceFromStart = command.tileCell.GetDistanceFromStart()
                             + command.tileCell.GetDistanceWeight();
                         float heuristic = CalcHeuristic(method, distanceFromStart,
                             command.tileCell, nextTileCell, _targetTileCell);
 
-                        if ((eFindMode.VIEW_RANGE == mode) && (_range < distanceFromStart))
+                        if (isViewRange && (_range < distanceFromStart))
                             return;
 
                         if(null == nextTileCell.GetPrevTileCell())
@@ -112,7 +116,7 @@ public class Pathfinder
 							PushCommand(newCommand);
 
                             //검색범위를 그려준다.
-                            if (eMapType.DUNGEON == GameManager.Instance.GetMapType())
+                            if (isViewRange)
                                 DrawSearchTile(nextTileCell);
                         }
                     }
@@ -129,7 +133,7 @@ public class Pathfinder
         _pathfindingQueue.Sort(CompareHeuristic);
     }
 
-    bool CheckPrecondition(TileCell nextTileCell, TileCell targetTileCell)
+    bool CheckPrecondition(eFindMode mode, TileCell nextTileCell, TileCell targetTileCell)
     {
 		//if ((null != nextTileCell) && (true == nextTileCell.IsPathfindable() && false == nextTileCell.IsVisit() ||
 		//    (nextTileCell.GetTileX() == _targetTileCell.GetTileX() && nextTileCell.GetTileY() == _targetTileCell.GetTileY())))
@@ -140,8 +144,11 @@ public class Pathfinder
         if (false == nextTileCell.IsVisit())
             condition = true;
 
-        if (condition)
-            condition = nextTileCell.CanMove();
+		if(eFindMode.VIEW_MOVERANGE == mode || eFindMode.FIND_PATH == mode)
+		{
+			if (condition)
+				condition = nextTileCell.CanMove();
+		}
 
         if (eMapType.DUNGEON == GameManager.Instance.GetMapType())
             return condition;

@@ -282,10 +282,9 @@ public class Character : MapObject
     }
 
     //Attack
-
     int _damagedPoint = 0;
 	bool _canBattle = true;
-
+	MapObject _enemy = null;
     Character _whoAttackedMe;
 
     public void Attack(MapObject enemy)
@@ -298,6 +297,11 @@ public class Character : MapObject
 
         MessageSystem.Instance.Send(msgParam);
     }
+
+	public void SetEnemy(MapObject enemy)
+	{
+		_enemy = enemy;
+	}
 
     public Character WhoAttackedMe()
     {
@@ -349,7 +353,6 @@ public class Character : MapObject
 
 
     //UI
-
     Slider _hpGuage;
     Slider _cooltimeGuage;
     Text _levelText;
@@ -423,7 +426,6 @@ public class Character : MapObject
 
 
     //Pathfinding
-
     TileCell _targetTileCell = null;
     Stack<TileCell> _pathTileCellStack = new Stack<TileCell>();
 

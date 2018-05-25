@@ -14,21 +14,25 @@ public class SelectTargetState : State
     public override void Update()
     {
         base.Update();
-		_character.ChargeBehaivor();
 
+		if (Input.GetMouseButtonDown(1))
+			CloseUI();
+
+		_character.ChargeBehaivor();
         SetNextStateByAction();
     }
 
     public override void Start()
     {
-        base.Start();
-        _character.ResetTargetTileCell();
+		base.Start();
+		_character.ResetTargetTileCell();
         
-        int range = GetViewRange();
+		int range = GetViewRange();
+		eFindMode mode = GetFindMode();
 
-        _rangeViewer.Init(_character);
+		_rangeViewer.Init(_character);
 		_rangeViewer.SetRange(range);
-        _rangeViewer.FindPath(eFindMode.VIEW_RANGE, eFindMethod.DISTANCE);
+		_rangeViewer.FindPath(mode, eFindMethod.DISTANCE);
     }
 
     public override void Stop()
@@ -38,10 +42,14 @@ public class SelectTargetState : State
         _rangeViewer.Reset();
     }
 
-    int GetViewRange()
-    {
-		Debug.Log(_character.GetActionType().ToString());
+	void CloseUI()
+	{
+		_character.CloseBattleMenu();
+		_nextState = eStateType.IDLE;
+	}
 
+	int GetViewRange()
+    {
 		switch (_character.GetActionType())
 		{
 			case eActionType.MOVE:
@@ -53,13 +61,29 @@ public class SelectTargetState : State
 		}
 	}
 
-    void SetNextStateByAction()
+	eFindMode GetFindMode()
+	{
+		switch (_character.GetActionType())
+		{
+			case eActionType.MOVE:
+				return eFindMode.VIEW_MOVERANGE;
+			case eActionType.ATTACK:
+				return eFindMode.VIEW_ATTACKRANGE;
+			default:
+				return eFindMode.NONE;
+		}
+	}
+
+	void SetNextStateByAction()
     {
         switch(_character.GetActionType())
         {
             case eActionType.MOVE:
                 MoveAction();
                 break;
+			case eActionType.ATTACK:
+				AttackAction();
+				break;
             default:
                 break;
         }
@@ -68,14 +92,34 @@ public class SelectTargetState : State
     void MoveAction()
     {
         TileCell targetCell = _character.GetTargetTileCell();
-        if (null == targetCell)
-            return;
+		if (null == targetCell)
+			return;
 
-        if (!(targetCell.GetTileX() == _character.GetTileX()
+		if (!(targetCell.GetTileX() == _character.GetTileX()
             && targetCell.GetTileY() == _character.GetTileY()))
         {
             if (_rangeViewer.CheckRange(targetCell))
                 _nextState = eStateType.PATHFINDING;
         }
     }
+
+	void AttackAction()
+	{
+		TileCell targetCell = _character.GetTargetTileCell();
+		if (null == targetCell)
+			return;
+
+		if(_rangeViewer.CheckRange(targetCell))
+		{
+			List<MapObject> collisonList = targetCell.GetCollsionList();
+			for (int i = 0; i < collisonList.Count; i++)
+			{
+				MapObject mapObject = collisonList[i];
+				if (eMapObjectType.MONSTER == mapObject.GetObjectType())
+					_character.SetEnemy(mapObject);
+			}
+
+			_nextState = eStateType.ATTACK;
+		}
+	}
 }
