@@ -116,10 +116,12 @@ public class SelectTargetState : State
 			{
 				MapObject mapObject = collisonList[i];
 				if (eMapObjectType.MONSTER == mapObject.GetObjectType())
-					_character.SetEnemy(mapObject);
+				{
+					_character.SetTarget(mapObject);
+					_nextState = eStateType.ATTACK;
+					return;
+				}
 			}
-
-			_nextState = eStateType.ATTACK;
 		}
 	}
 }

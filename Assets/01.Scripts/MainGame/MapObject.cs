@@ -89,14 +89,13 @@ public class MapObject : MonoBehaviour
 
     virtual public void ReceiveObjectMessage(MessageParam msgParam)
     {
-        switch (msgParam.message)
-        {
-            //case "Attack":
-            //    //Debug.Log("Receive AttackMessage: " + msgParam.attackPoint);
-            //    Damaged(msgParam.attackPoint);
-            //    break;
-        }
-    }
+		//switch (msgParam.message)
+		//{
+		//	case "Attack":
+		//		Debug.Log("Receive AttackMessage: " + msgParam.attackPoint);
+		//		break;
+		//}
+	}
 
 
     //tile Position

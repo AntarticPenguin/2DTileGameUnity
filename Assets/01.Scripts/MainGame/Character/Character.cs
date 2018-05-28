@@ -196,14 +196,14 @@ public class Character : MapObject
 
 
     //Character's Info
-
+	//Stat
     protected int _hp = 100;
-    protected int _attackPoint = 10;
-    protected float _moveSpeed = 0.02f;
-    protected int _moveRange = 10;
+	protected float _moveSpeed = 0.02f;
+	protected int _moveRange = 10;
+	protected int _behaviorPoint = 10;
 	protected int _attackRange = 2;
-    protected int _behaviorPoint = 10;
-    protected float _chargeTime = 1.0f;
+	protected int _attackPoint = 10;
+	protected float _chargeTime = 1.0f;
 
     protected int _level = 1;
     protected int _expPoint = 0;
@@ -223,7 +223,7 @@ public class Character : MapObject
     {
         _behaviorPoint++;
 
-        if (10 < _behaviorPoint)
+        if (10 <= _behaviorPoint)
         {
             _behaviorPoint = 10;
 			_canBattle = true;
@@ -262,13 +262,14 @@ public class Character : MapObject
 
     public sCharacterInfo GetCharacterInfo()
     {
-        sCharacterInfo info = new sCharacterInfo();
-        info.hp = _hp;
-        info.attackPoint = _attackPoint;
-        info.level = _level;
-        info.nextLvExpStat = _nextLvExpStat;
-        info.curExpStat = _curExpStat;
-
+		sCharacterInfo info = new sCharacterInfo
+		{
+			hp = _hp,
+			attackPoint = _attackPoint,
+			level = _level,
+			nextLvExpStat = _nextLvExpStat,
+			curExpStat = _curExpStat
+		};
         return info;
     }
 
@@ -281,10 +282,11 @@ public class Character : MapObject
         _curExpStat = info.curExpStat;
     }
 
-    //Attack
-    int _damagedPoint = 0;
+	//Attack
+	int _damagedPoint = 0;
+
 	bool _canBattle = true;
-	MapObject _enemy = null;
+	MapObject _target = null;
     Character _whoAttackedMe;
 
     public void Attack(MapObject enemy)
@@ -298,12 +300,18 @@ public class Character : MapObject
         MessageSystem.Instance.Send(msgParam);
     }
 
-	public void SetEnemy(MapObject enemy)
+	public void SetTarget(MapObject enemy)
 	{
-		_enemy = enemy;
+		_target = enemy;
 	}
 
-    public Character WhoAttackedMe()
+	public MapObject GetTarget()
+	{
+		return _target;
+	}
+
+
+	public Character WhoAttackedMe()
     {
         return _whoAttackedMe;
     }
@@ -327,8 +335,8 @@ public class Character : MapObject
     {
         string filePath = "Prefabs/Effect/DamageEffect";
         GameObject effectPrefab = Resources.Load<GameObject>(filePath);
-        GameObject effectObject = GameObject.Instantiate(effectPrefab, transform.position, Quaternion.identity);
-        GameObject.Destroy(effectObject, 1.0f);
+        GameObject effectObject = Instantiate(effectPrefab, transform.position, Quaternion.identity);
+        Destroy(effectObject, 1.0f);
 
         _characterView.GetComponent<SpriteRenderer>().color = Color.red;
         Invoke("ResetColor", 0.1f);
@@ -420,7 +428,7 @@ public class Character : MapObject
     void UpdateUI()
     {
         _hpGuage.value = _hp / 100.0f;
-		_cooltimeGuage.value = 0.0f;
+		_cooltimeGuage.value = _behaviorPoint / 10.0f;
         _levelText.text = "LEVEL " + _level;
     }
 

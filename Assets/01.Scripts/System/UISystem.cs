@@ -42,7 +42,7 @@ public class UISystem : MonoBehaviour
 
     void Start()
     {
-
+		
     }
 
     void Update()

@@ -9,9 +9,11 @@ public class AttackState : State
         base.Start();
 
         SoundPlayer.Instance.playEffect("player_hit");
-
 		Debug.Log("ATTACK");
-        
+
+		MapObject enemy = _character.GetTarget();
+		_character.Attack(enemy);
+		
         _nextState = eStateType.IDLE;
     }
 

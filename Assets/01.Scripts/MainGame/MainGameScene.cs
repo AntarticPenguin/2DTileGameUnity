@@ -36,7 +36,7 @@ public class MainGameScene : MonoBehaviour
         string filePath = "Prefabs/CharacterFrame/Character";
         GameObject characterPrefabs = Resources.Load<GameObject>(filePath);
 
-        GameObject characterGameObject = GameObject.Instantiate(characterPrefabs);
+        GameObject characterGameObject = Object.Instantiate(characterPrefabs);
         characterGameObject.transform.SetParent(_tileMap.transform);
         characterGameObject.transform.localPosition = Vector3.zero;
 
@@ -53,15 +53,15 @@ public class MainGameScene : MonoBehaviour
         }
         character.Init(resourceName);
 
-        Slider hpGuage = UISystem.Instance.CreateHPSlider();
-        character.LinkHPGuage(hpGuage);
+		Slider hpGuage = UISystem.Instance.CreateHPSlider();
+		character.LinkHPGuage(hpGuage);
 
-        Slider cooltimeGuage = UISystem.Instance.CreateCooltimeSlider();
-        character.LinkCooltimeGuage(cooltimeGuage);
+		Slider cooltimeGuage = UISystem.Instance.CreateCooltimeSlider();
+		character.LinkCooltimeGuage(cooltimeGuage);
 
-        Text levelText = UISystem.Instance.CreateLevelText();
-        character.LinkLevelText(levelText);
+		Text levelText = UISystem.Instance.CreateLevelText();
+		character.LinkLevelText(levelText);
 
-        return character;
+		return character;
     }
 }

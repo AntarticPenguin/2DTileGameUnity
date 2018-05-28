@@ -30,10 +30,10 @@ public class UIAction : MonoBehaviour
 
     void Update()
     {
-		if (_actor.GetBehaviorPoint() < 10)
-			_animationMap[eAnimationMenu.MOVE].SetTrigger("disabled");
-		else
+		if (10 <= _actor.GetBehaviorPoint())
 			_animationMap[eAnimationMenu.MOVE].SetTrigger("ready");
+		else
+			_animationMap[eAnimationMenu.MOVE].SetTrigger("disabled");
 
 		if (_actor.canBattle())
 			SetBattleUITrigger("ready");
@@ -44,9 +44,7 @@ public class UIAction : MonoBehaviour
 	void SetBattleUITrigger(string trigger)
 	{
 		for (int i = (int)eAnimationMenu.ITEM; i < (int)eAnimationMenu.MAX_COUNT; i++)
-		{
 			_animationMap[(eAnimationMenu)i].SetTrigger(trigger);
-		}
 	}
 
     public void UIMove()
@@ -68,4 +66,9 @@ public class UIAction : MonoBehaviour
 			_actor.ChangeState(eStateType.SELECT_TARGET);
 		}
     }
+
+	public void UIMagic()
+	{
+
+	}
 }

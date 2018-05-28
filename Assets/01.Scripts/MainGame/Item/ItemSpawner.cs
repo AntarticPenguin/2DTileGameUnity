@@ -37,7 +37,7 @@ public class ItemSpawner
         string filePath = "Prefabs/Item/ItemFrame";
 
         GameObject itemPrefab = Resources.Load<GameObject>(filePath);
-        GameObject itemObject = GameObject.Instantiate(itemPrefab);
+        GameObject itemObject = Object.Instantiate(itemPrefab);
         itemObject.transform.SetParent(GameManager.Instance.GetMap().transform);
         itemObject.transform.localScale = Vector3.one;
         itemObject.transform.localPosition = Vector3.zero;

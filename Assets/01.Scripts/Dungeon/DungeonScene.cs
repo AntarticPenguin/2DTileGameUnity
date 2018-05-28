@@ -31,7 +31,10 @@ public class DungeonScene : MonoBehaviour
         Character player = CreateCharacter("Player", "character03");
         player.SetCharacterInfo(info);
 
-        Character monster = CreateCharacter("Monster", "character02");
+		for(int i = 0; i < 10; i++)
+		{
+			Character monster = CreateCharacter("Monster", "character02");
+		}
         player.BecomeViewer();
     }
 

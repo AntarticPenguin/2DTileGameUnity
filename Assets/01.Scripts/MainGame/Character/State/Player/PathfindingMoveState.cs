@@ -23,7 +23,8 @@ public class PathfindingMoveState : State {
         base.Stop();
         _pathTileCellStack.Clear();
 
-        _character.DecreaseBehavior(2);
+		if(eMapType.DUNGEON == GameManager.Instance.GetMapType())
+			_character.DecreaseBehavior(2);
     }
 
     public override void Update()
