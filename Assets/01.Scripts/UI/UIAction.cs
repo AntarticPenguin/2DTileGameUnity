@@ -69,6 +69,12 @@ public class UIAction : MonoBehaviour
 
 	public void UIMagic()
 	{
-
+		if (_actor.canBattle())
+		{
+		    _actor.CloseBattleMenu();
+		    _actor.OpenMagicMenu();
+		    _actor.SetActionType(eActionType.MAGIC);
+		    _actor.ChangeState(eStateType.SELECT_TARGET);
+		}
 	}
 }

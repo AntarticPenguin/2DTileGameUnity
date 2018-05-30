@@ -365,6 +365,7 @@ public class Character : MapObject
     Slider _cooltimeGuage;
     Text _levelText;
     Canvas _battleMenu;
+	Canvas _magicMenu;
 
     public void LinkHPGuage(Slider hpGuage)
     {
@@ -406,7 +407,7 @@ public class Character : MapObject
         battleMenu.transform.localScale = Vector3.one;
 
         _battleMenu = battleMenu;
-    }
+	}
 
 
     //MenuUI
@@ -421,6 +422,18 @@ public class Character : MapObject
     {
         _menuOn = false;
         _battleMenu.gameObject.SetActive(false);
+    }
+
+    public void OpenMagicMenu()
+    {
+        _menuOn = true;
+        _magicMenu.gameObject.SetActive(true);
+    }
+
+    public void CloseMagicMenu()
+    {
+        _menuOn = false;
+        _magicMenu.gameObject.SetActive(false);
     }
 
     public bool IsMenuOn() { return _menuOn; }
@@ -476,4 +489,13 @@ public class Character : MapObject
 
     public void SetActionType(eActionType type) { _curAction = type; }
     public eActionType GetActionType() { return _curAction; }
+
+
+	//Skill
+	protected List<Skill> _skillList = new List<Skill>();
+
+	public virtual void InitSkill()
+	{
+
+	}
 }

@@ -103,8 +103,16 @@ public class Player : Character
         }
     }
 
-	public eFindMode GetFindMode()
+	public override void InitSkill()
 	{
-		return eFindMode.FIND_PATH;
+		base.InitSkill();
+
+		{
+			Skill skill = new Skill("이름", "이미지");
+			skill.SetCastingRange(캐스팅 가능 범위);
+			skill.SetAttackRange(스킬의 공격 범위);
+
+			_skillList.Add(skill);
+		}
 	}
 }
