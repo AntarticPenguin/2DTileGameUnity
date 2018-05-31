@@ -22,30 +22,8 @@ public class Player : Character
 
     void Start ()
     {
-        base.InitState();
-
-        {
-            State state = new PlayerIdleState();
-            state.Init(this);
-            _stateMap[eStateType.IDLE] = state;
-        }
-        {
-            State state = new PathfindingMoveState();
-            state.Init(this);
-            _stateMap[eStateType.MOVE] = state;
-        }
-        {
-            State state = new PathfindingState();
-            state.Init(this);
-            _stateMap[eStateType.PATHFINDING] = state;
-        }
-        {
-            State state = new SelectTargetState();
-            state.Init(this);
-            _stateMap[eStateType.SELECT_TARGET] = state;
-        }
-
-        _state = _stateMap[eStateType.IDLE];
+		InitState();
+		InitSkill();
     }
 
     void Update()
@@ -103,14 +81,43 @@ public class Player : Character
         }
     }
 
+	public override void InitState()
+	{
+		base.InitState();
+
+		{
+			State state = new PlayerIdleState();
+			state.Init(this);
+			_stateMap[eStateType.IDLE] = state;
+		}
+		{
+			State state = new PathfindingMoveState();
+			state.Init(this);
+			_stateMap[eStateType.MOVE] = state;
+		}
+		{
+			State state = new PathfindingState();
+			state.Init(this);
+			_stateMap[eStateType.PATHFINDING] = state;
+		}
+		{
+			State state = new SelectTargetState();
+			state.Init(this);
+			_stateMap[eStateType.SELECT_TARGET] = state;
+		}
+
+		_state = _stateMap[eStateType.IDLE];
+	}
+
 	public override void InitSkill()
 	{
 		base.InitSkill();
 
 		{
-			Skill skill = new Skill("이름", "이미지");
-			skill.SetCastingRange(캐스팅 가능 범위);
-			skill.SetAttackRange(스킬의 공격 범위);
+			Skill skill = new Skill();
+			skill.Init("fireball", "skill_fireball01");
+			skill.SetCastingRange(5);
+			skill.SetAttackRange(3);
 
 			_skillList.Add(skill);
 		}

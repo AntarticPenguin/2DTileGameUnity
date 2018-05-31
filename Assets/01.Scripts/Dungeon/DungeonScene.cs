@@ -31,10 +31,14 @@ public class DungeonScene : MonoBehaviour
         Character player = CreateCharacter("Player", "character03");
         player.SetCharacterInfo(info);
 
-		for(int i = 0; i < 10; i++)
+		//battleUI
+		SetBattleUI(player);
+
+		for (int i = 0; i < 10; i++)
 		{
 			Character monster = CreateCharacter("Monster", "character02");
 		}
+
         player.BecomeViewer();
     }
 
@@ -43,7 +47,7 @@ public class DungeonScene : MonoBehaviour
         string filePath = "Prefabs/CharacterFrame/Character";
         GameObject characterPrefabs = Resources.Load<GameObject>(filePath);
 
-        GameObject characterGameObject = GameObject.Instantiate(characterPrefabs);
+        GameObject characterGameObject = Instantiate(characterPrefabs);
         characterGameObject.transform.SetParent(_tileMap.transform);
         characterGameObject.transform.localPosition = Vector3.zero;
 
@@ -69,14 +73,15 @@ public class DungeonScene : MonoBehaviour
         Text levelText = UISystem.Instance.CreateLevelText();
         character.LinkLevelText(levelText);
 
-        //test
-        if("Player" == fileName)
-        {
-            Canvas battleMenu = UISystem.Instance.CreateBattleMenu();
-            character.LinkBattleMenu(battleMenu);
-            character.CloseBattleMenu();
-        }
-
         return character;
-    }
+	}
+
+	void SetBattleUI(Character player)
+	{
+		Canvas battleMenu = UISystem.Instance.CreateBattleMenu();
+		player.LinkBattleMenu(battleMenu);
+		player.CloseBattleMenu();
+
+		Canvas skillMenu = UISystem.Instance.CreateSkillMenu();
+	}
 }

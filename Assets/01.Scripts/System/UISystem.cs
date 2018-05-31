@@ -38,6 +38,7 @@ public class UISystem : MonoBehaviour
         _cooltimeGuagePrefabs = Resources.Load<GameObject>(filePath + "cooltimeGuage");
         _levelTextPrefabs = Resources.Load<GameObject>(filePath + "LevelText");
         _battleMenuPrefabs = Resources.Load<GameObject>(filePath + "battleMenu");
+		_skillMenuPrefabs = Resources.Load<GameObject>(filePath + "skillMenu");
     }
 
     void Start()
@@ -56,8 +57,10 @@ public class UISystem : MonoBehaviour
     GameObject _cooltimeGuagePrefabs;
     GameObject _levelTextPrefabs;
     GameObject _battleMenuPrefabs;
+	GameObject _skillMenuPrefabs;
 
-    public Slider CreateHPSlider()
+
+	public Slider CreateHPSlider()
     {
         return CreateSlider(_hpGuagePrefabs);
     }
@@ -83,10 +86,20 @@ public class UISystem : MonoBehaviour
 
     public Canvas CreateBattleMenu()
     {
-        GameObject canvasObject = Instantiate(_battleMenuPrefabs);
-        Canvas canvas = canvasObject.GetComponent<Canvas>();
-        return canvas;
+		return CreateCanvasMenu(_battleMenuPrefabs);
     }
 
-    #endregion
+	public Canvas CreateSkillMenu()
+	{
+		return CreateCanvasMenu(_skillMenuPrefabs);
+	}
+
+	public Canvas CreateCanvasMenu(GameObject canvasPrefabs)
+	{
+		GameObject canvasObject = Instantiate(canvasPrefabs);
+		Canvas canvas = canvasObject.GetComponent<Canvas>();
+		return canvas;
+	}
+
+	#endregion
 }
