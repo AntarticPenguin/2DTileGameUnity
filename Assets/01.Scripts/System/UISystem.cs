@@ -39,6 +39,12 @@ public class UISystem : MonoBehaviour
         _levelTextPrefabs = Resources.Load<GameObject>(filePath + "LevelText");
         _battleMenuPrefabs = Resources.Load<GameObject>(filePath + "battleMenu");
 		_skillMenuPrefabs = Resources.Load<GameObject>(filePath + "skillMenu");
+
+		_skillSprites = Resources.LoadAll<Sprite>("Sprites/Skill_icon");
+		for(int i = 0; i < _skillSprites.Length; i++)
+		{
+			_skillSpriteMap[_skillSprites[i].name] = _skillSprites[i];
+		}
     }
 
     void Start()
@@ -58,7 +64,8 @@ public class UISystem : MonoBehaviour
     GameObject _levelTextPrefabs;
     GameObject _battleMenuPrefabs;
 	GameObject _skillMenuPrefabs;
-
+	Sprite[] _skillSprites;
+	Dictionary<string, Sprite> _skillSpriteMap = new Dictionary<string, Sprite>();
 
 	public Slider CreateHPSlider()
     {
@@ -99,6 +106,11 @@ public class UISystem : MonoBehaviour
 		GameObject canvasObject = Instantiate(canvasPrefabs);
 		Canvas canvas = canvasObject.GetComponent<Canvas>();
 		return canvas;
+	}
+
+	public Dictionary<string, Sprite> GetSkillSpriteMap()
+	{
+		return _skillSpriteMap;
 	}
 
 	#endregion

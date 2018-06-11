@@ -10,8 +10,11 @@ public class Player : Character
 
     void Awake()
     {
-        //character's info init
-        _hp = 100;
+		InitState();
+		InitSkill();
+
+		//character's info init
+		_hp = 100;
         _level = 1;
         _attackPoint = _level * 50;
 
@@ -22,8 +25,7 @@ public class Player : Character
 
     void Start ()
     {
-		InitState();
-		InitSkill();
+
     }
 
     void Update()

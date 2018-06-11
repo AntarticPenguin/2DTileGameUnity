@@ -15,6 +15,9 @@ public class Skill
 		_spriteName = spriteName;
 	}
 
+	public string GetSkillName() { return _skillName; }
+	public string GetSpriteName() { return _spriteName; }
+
 	public void SetCastingRange(int range) { _castingRange = range; }
 	public void SetAttackRange(int range) { _attackRange = range; }
 

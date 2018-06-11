@@ -64,7 +64,7 @@ public class TileMap : MonoBehaviour
                 {
                     int spriteIndex = int.Parse(token[x]);
 
-                    GameObject tileGameObject = GameObject.Instantiate(TileObjectPrefabs);
+                    GameObject tileGameObject = Instantiate(TileObjectPrefabs);
                     tileGameObject.transform.SetParent(transform);
                     tileGameObject.transform.localScale = Vector3.one;
                     tileGameObject.transform.localPosition = Vector3.zero;

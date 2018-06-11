@@ -83,5 +83,22 @@ public class DungeonScene : MonoBehaviour
 		player.CloseBattleMenu();
 
 		Canvas skillMenu = UISystem.Instance.CreateSkillMenu();
+		List<Skill> skillList = player.GetSkillList();
+		GameObject skillFramePrefab = Resources.Load<GameObject>("Prefabs/UI/skillFrame");
+		Dictionary<string, Sprite> spriteMap = UISystem.Instance.GetSkillSpriteMap();
+		for(int i = 0; i < skillList.Count; i++)
+		{
+			GameObject skillObject = Instantiate(skillFramePrefab);
+			Image image = skillObject.GetComponent<Image>();
+			image.sprite = spriteMap[skillList[i].GetSpriteName()];
+
+			skillObject.name = skillList[i].GetSkillName();
+			skillObject.transform.SetParent(skillMenu.transform);
+			skillObject.transform.localPosition = new Vector2(-32.0f, 32.0f);
+			skillObject.transform.localScale = Vector2.one;
+		}
+
+		player.LinkSKillMenu(skillMenu);
+		player.CloseSkillMenu();
 	}
 }
